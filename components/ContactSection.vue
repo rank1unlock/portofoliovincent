@@ -82,7 +82,7 @@
                 <div class="contact-icon-ring bg-blue-400/30"></div>
                 <div class="contact-icon-glow"></div>
               </div>
-              <span class="contact-phone-typewriter">(+62) 813-1635-0886</span>
+              <span class="contact-phone-typewriter">(+62) 812-5285-0845</span>
             </div>
             <div class="flex items-center gap-4 text-gray-300 contact-item contact-item-enhanced group">
               <div class="icon-bounce contact-icon-orbit" style="animation-delay: 0.4s">
