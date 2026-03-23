@@ -1,0 +1,392 @@
+[
+  {
+    "id": 1,
+    "title": {
+      "id": "Hak Kekayaan Intelektual",
+      "en": "Intellectual Property Rights"
+    },
+    "issuer": {
+      "id": "Kementerian Hukum RI",
+      "en": "Ministry of Law RI"
+    },
+    "date": {
+      "id": "September 2025",
+      "en": "September 2025"
+    },
+    "imageUrl": "/images/hki.png",
+    "driveUrl": "https://drive.google.com/file/d/102hW_VRm3XcgmcmijY-_MJ7ecftktxsO/view?usp=sharing",
+    "categoryId": "legal",
+    "categoryLabel": {
+      "id": "Legal",
+      "en": "Legal"
+    },
+    "skills": [
+      "IP Rights",
+      "Copyright",
+      "Patent"
+    ]
+  },
+  {
+    "id": 2,
+    "title": {
+      "id": "Dasar Cloud dan Gen AI AWS",
+      "en": "AWS Cloud and Gen AI Basics"
+    },
+    "issuer": {
+      "id": "Dicoding Indonesia",
+      "en": "Dicoding Indonesia"
+    },
+    "date": {
+      "id": "Juni 2025",
+      "en": "June 2025"
+    },
+    "imageUrl": "/images/ai.png",
+    "driveUrl": "https://drive.google.com/file/d/1-5A7Qh7v7nPLfeGzwMjv3KygZ_TkrRok/view?usp=drive_link",
+    "categoryId": "cloud-ai",
+    "categoryLabel": {
+      "id": "Cloud & AI",
+      "en": "Cloud & AI"
+    },
+    "skills": [
+      "AWS",
+      "Gen AI",
+      "Cloud"
+    ]
+  },
+  {
+    "id": 3,
+    "title": {
+      "id": "Belajar Back-End Dengan JavaScript",
+      "en": "Learning Back-End With JavaScript"
+    },
+    "issuer": {
+      "id": "Dicoding Indonesia",
+      "en": "Dicoding Indonesia"
+    },
+    "date": {
+      "id": "Juni 2025",
+      "en": "June 2025"
+    },
+    "imageUrl": "/images/api.png",
+    "driveUrl": "https://drive.google.com/file/d/1TE8NSY3KJ-3FpRKy9db-QD0PLPahWB8x/view?usp=drive_link",
+    "categoryId": "backend",
+    "categoryLabel": {
+      "id": "Backend",
+      "en": "Backend"
+    },
+    "skills": [
+      "Node.js",
+      "API",
+      "JavaScript"
+    ]
+  },
+  {
+    "id": 4,
+    "title": {
+      "id": "Belajar Dasar Pemrograman JavaScript",
+      "en": "Learning Basic JavaScript Programming"
+    },
+    "issuer": {
+      "id": "Dicoding Indonesia",
+      "en": "Dicoding Indonesia"
+    },
+    "date": {
+      "id": "April 2025",
+      "en": "April 2025"
+    },
+    "imageUrl": "/images/js.png",
+    "driveUrl": "https://drive.google.com/file/d/1wAJ1UYPisw38TaS5e-8sdEJCJoZHm1a_/view?usp=drive_link",
+    "categoryId": "programming",
+    "categoryLabel": {
+      "id": "Pemrograman",
+      "en": "Programming"
+    },
+    "skills": [
+      "JavaScript",
+      "ES6",
+      "DOM"
+    ]
+  },
+  {
+    "id": 5,
+    "title": {
+      "id": "Belajar Dasar Pemrograman C",
+      "en": "Learning Basic C Programming"
+    },
+    "issuer": {
+      "id": "Dicoding Indonesia",
+      "en": "Dicoding Indonesia"
+    },
+    "date": {
+      "id": "Juni 2025",
+      "en": "June 2025"
+    },
+    "imageUrl": "/images/c.png",
+    "driveUrl": "https://drive.google.com/file/d/1LY5nPijDOnHKOjmSu3ADkGAgW9IO1oTR/view?usp=drive_link",
+    "categoryId": "programming",
+    "categoryLabel": {
+      "id": "Pemrograman",
+      "en": "Programming"
+    },
+    "skills": [
+      "C",
+      "Memory",
+      "Pointer"
+    ]
+  },
+  {
+    "id": 6,
+    "title": {
+      "id": "Belajar Prinsip Pemrograman SOLID",
+      "en": "Learning SOLID Programming Principles"
+    },
+    "issuer": {
+      "id": "Dicoding Indonesia",
+      "en": "Dicoding Indonesia"
+    },
+    "date": {
+      "id": "Juni 2025",
+      "en": "June 2025"
+    },
+    "imageUrl": "/images/solid.png",
+    "driveUrl": "https://drive.google.com/file/d/1LeohQQnvLm672ODk-w2Am3Sl9MsfFlXB/view?usp=drive_link",
+    "categoryId": "best-practice",
+    "categoryLabel": {
+      "id": "Sistem Komputer",
+      "en": "Computer System"
+    },
+    "skills": [
+      "SOLID",
+      "OOP",
+      "Design"
+    ]
+  },
+  {
+    "id": 7,
+    "title": {
+      "id": "Belajar Pemrograman Java",
+      "en": "Learning Java Programming"
+    },
+    "issuer": {
+      "id": "Dicoding Indonesia",
+      "en": "Dicoding Indonesia"
+    },
+    "date": {
+      "id": "Juni 2025",
+      "en": "June 2025"
+    },
+    "imageUrl": "/images/java.png",
+    "driveUrl": "https://drive.google.com/file/d/1LeohQQnvLm672ODk-w2Am3Sl9MsfFlXB/view?usp=drive_link",
+    "categoryId": "programming",
+    "categoryLabel": {
+      "id": "Pemrograman",
+      "en": "Programming"
+    },
+    "skills": [
+      "Java",
+      "OOP",
+      "Spring"
+    ]
+  },
+  {
+    "id": 8,
+    "title": {
+      "id": "Belajar Manajemen Proyek",
+      "en": "Learning Project Management"
+    },
+    "issuer": {
+      "id": "Dicoding Indonesia",
+      "en": "Dicoding Indonesia"
+    },
+    "date": {
+      "id": "Juni 2025",
+      "en": "June 2025"
+    },
+    "imageUrl": "/images/manajemen.png",
+    "driveUrl": "https://drive.google.com/file/d/1NJ_gOFHunrFVAi1n4xnO-j8uFU2B6_Dp/view?usp=drive_link",
+    "categoryId": "management",
+    "categoryLabel": {
+      "id": "Manajemen",
+      "en": "Management"
+    },
+    "skills": [
+      "PM",
+      "Agile",
+      "Scrum"
+    ]
+  },
+  {
+    "id": 9,
+    "title": {
+      "id": "Belajar Dasar Microsoft Excel",
+      "en": "Learning Basic Microsoft Excel"
+    },
+    "issuer": {
+      "id": "Edu Course",
+      "en": "Edu Course"
+    },
+    "date": {
+      "id": "Januari 2026",
+      "en": "January 2026"
+    },
+    "imageUrl": "/images/excel_edu.png",
+    "driveUrl": "https://drive.google.com/file/d/1aSI_yfrXjJqnBAla03Au1jKR3-cR0nO-/view?usp=drive_link",
+    "categoryId": "management",
+    "categoryLabel": {
+      "id": "Manajemen",
+      "en": "Management"
+    },
+    "skills": [
+      "Data Entry",
+      "Basic Data Analyst",
+      "Spreadsheet Management",
+      "Basic Excel Formulas"
+    ]
+  },
+  {
+    "id": 10,
+    "title": {
+      "id": "Belajar Dasar Microsoft Word",
+      "en": "Learning Basic Microsoft Word"
+    },
+    "issuer": {
+      "id": "Edu Course",
+      "en": "Edu Course"
+    },
+    "date": {
+      "id": "Januari 2026",
+      "en": "January 2026"
+    },
+    "imageUrl": "/images/word_edu.png",
+    "driveUrl": "https://drive.google.com/file/d/1NT6GCs2qQd0iFEaDXGBlPa_2ueIz8nNN/view?usp=drive_link",
+    "categoryId": "management",
+    "categoryLabel": {
+      "id": "Manajemen",
+      "en": "Management"
+    },
+    "skills": [
+      "Document Formatting",
+      "Word Processing",
+      "Typing & Editing",
+      "Document Layout",
+      "Basic Report Writing"
+    ]
+  },
+  {
+    "id": 11,
+    "title": {
+      "id": "Belajar Dasar Microsoft PowerPoint",
+      "en": "Learning Basic Microsoft PowerPoint"
+    },
+    "issuer": {
+      "id": "Edu Course",
+      "en": "Edu Course"
+    },
+    "date": {
+      "id": "Januari 2026",
+      "en": "January 2026"
+    },
+    "imageUrl": "/images/powerpoint_edu.png",
+    "driveUrl": "https://drive.google.com/file/d/19mszm_lvmhhDcx3HJ50gqnC22V9V9XDW/view?usp=drive_link",
+    "categoryId": "management",
+    "categoryLabel": {
+      "id": "Manajemen",
+      "en": "Management"
+    },
+    "skills": [
+      "Presentation Design",
+      "Slide Creation",
+      "Visual Communication",
+      "Storytelling",
+      "Basic Animation"
+    ]
+  },
+  {
+    "id": 12,
+    "title": {
+      "id": "Belajar Dasar Microsoft Outlook",
+      "en": "Learning Basic Microsoft Outlook"
+    },
+    "issuer": {
+      "id": "Edu Course",
+      "en": "Edu Course"
+    },
+    "date": {
+      "id": "Januari 2026",
+      "en": "January 2026"
+    },
+    "imageUrl": "/images/outlook_edu.png",
+    "driveUrl": "https://drive.google.com/file/d/1qjUjL8wVtHp95ogahCPQqRB_tu3R2fFT/view?usp=drive_link",
+    "categoryId": "management",
+    "categoryLabel": {
+      "id": "Manajemen",
+      "en": "Management"
+    },
+    "skills": [
+      "Email Management",
+      "Calendar Scheduling",
+      "Contact Organization",
+      "Task Management",
+      "Basic Communication Skills"
+    ]
+  },
+  {
+    "id": 13,
+    "title": {
+      "id": "Belajar Dasar Sistem Operasi Windows",
+      "en": "Learning Basic Windows Operating System"
+    },
+    "issuer": {
+      "id": "GCFGlobal",
+      "en": "GCFGlobal"
+    },
+    "date": {
+      "id": "Januari 2026",
+      "en": "January 2026"
+    },
+    "imageUrl": "/images/window_gcf.png",
+    "driveUrl": "https://drive.google.com/file/d/1doPpUgACQciGSI_Y3VH3O_z7ZRy71qZ8/view?usp=drive_link",
+    "categoryId": "best-practice",
+    "categoryLabel": {
+      "id": "Sistem Komputer",
+      "en": "Computer System"
+    },
+    "skills": [
+      "Basic Windows Navigation",
+      "File & Folder Management",
+      "Digital Organization",
+      "System Settings Configuration",
+      "Note Taking",
+      "Information Organization"
+    ]
+  },
+  {
+    "id": 14,
+    "title": {
+      "id": "Belajar Dasar Keamanan Jaringan",
+      "en": "Learning Basic Network Security"
+    },
+    "issuer": {
+      "id": "GCFGlobal",
+      "en": "GCFGlobal"
+    },
+    "date": {
+      "id": "Januari 2026",
+      "en": "January 2026"
+    },
+    "imageUrl": "/images/internet_gcf.png",
+    "driveUrl": "https://drive.google.com/file/d/1ImAVsMaeywayiOCVdtRBIInlnUFWp-6j/view?usp=drive_link",
+    "categoryId": "best-practice",
+    "categoryLabel": {
+      "id": "Sistem Komputer",
+      "en": "Computer System"
+    },
+    "skills": [
+      "Basic Network Concepts",
+      "Cybersecurity Awareness",
+      "Password & Account Security",
+      "Safe Internet Practices",
+      "Basic Malware & Threat Awareness"
+    ]
+  }
+]

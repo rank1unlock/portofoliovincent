@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": {
+      "id": "Budi Santoso",
+      "en": "Budi Santoso"
+    },
+    "title": {
+      "id": "CEO TechIndo",
+      "en": "CEO TechIndo"
+    },
+    "quote": {
+      "id": "Kerja sama yang luar biasa! Hasil sangat memuaskan dan selesai tepat waktu.",
+      "en": "Amazing collaboration! Very satisfying results and completed on time."
+    },
+    "imageUrl": "/images/foto.png"
+  },
+  {
+    "id": 1773300872054,
+    "name": {
+      "id": "testing",
+      "en": "testing"
+    },
+    "title": {
+      "id": "testing",
+      "en": "testing"
+    },
+    "quote": {
+      "id": "testing",
+      "en": "testing"
+    },
+    "imageUrl": "/images/cert_1773300871841.png"
+  }
+]

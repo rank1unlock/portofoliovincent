@@ -1,0 +1,176 @@
+[
+  {
+    "id": 1,
+    "title": {
+      "id": "Portofolio Pribadi",
+      "en": "Personal Portfolio"
+    },
+    "description": {
+      "id": "Website portofolio interaktif dibangun dengan Nuxt.js dan Tailwind CSS.",
+      "en": "Interactive portfolio website built with Nuxt.js and Tailwind CSS."
+    },
+    "useIcon": true,
+    "mainIcon": "mdi:account-circle",
+    "iconLabel": "Personal Portfolio",
+    "backgroundIcons": [
+      "mdi:code-tags",
+      "mdi:palette",
+      "mdi:responsive",
+      "mdi:star"
+    ],
+    "gradientFrom": "from-purple-600",
+    "gradientTo": "to-pink-600",
+    "stack": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Vue.js",
+      "Tailwind CSS"
+    ],
+    "githubUrl": "https://github.com/USERNAMEANDA/NAMA-REPO-PORTO",
+    "canvaEmbedUrl": "https://www.canva.com/design/DAGwtGsPouw/d92nGByXw9YGBAWQhw34Rg/view?embed",
+    "canvaExternalUrl": "https://www.canva.com/design/DAGwtGsPouw/d92nGByXw9YGBAWQhw34Rg/view?utm_content=DAGwtGsPouw&utm_campaign=designshare&utm_medium=embeds&utm_source=link",
+    "canvaTitle": "Presentation - Personal Website Project Showcase",
+    "canvaAuthor": "Vincent axel",
+    "liveUrl": null
+  },
+  {
+    "id": 2,
+    "title": {
+      "id": "Sistem Prediksi Bahan Pangan",
+      "en": "Food Ingredients Prediction"
+    },
+    "description": {
+      "id": "Sistem untuk memprediksi stok bahan pangan menggunakan algoritma tertentu.",
+      "en": "System to predict food ingredient stocks using specific algorithms."
+    },
+    "useIcon": true,
+    "mainIcon": "mdi:food-apple",
+    "iconLabel": "Food Ingredients Prediction",
+    "backgroundIcons": [
+      "mdi:chart-line",
+      "mdi:brain",
+      "mdi:database",
+      "mdi:test-tube"
+    ],
+    "gradientFrom": "from-green-600",
+    "gradientTo": "to-blue-600",
+    "stack": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "PHP",
+      "MySQL"
+    ],
+    "githubUrl": "https://github.com/rank1unlock/Projek_Prediksi_Bahan_Pangan",
+    "canvaEmbedUrl": "https://www.canva.com/design/DAGwmGb1k5I/n-P6C6ABnJ2mGrQixojssQ/view?embed",
+    "canvaExternalUrl": "https://www.canva.com/design/DAGwmGb1k5I/n-P6C6ABnJ2mGrQixojssQ/view?utm_content=DAGwmGb1k5I&utm_campaign=designshare&utm_medium=embeds&utm_source=link",
+    "canvaTitle": "Presentation - Website Prediction Project: Food Ingredients",
+    "canvaAuthor": "Vincent axel",
+    "liveUrl": null
+  },
+  {
+    "id": 3,
+    "title": {
+      "id": "Chatbot Spa Wellness",
+      "en": "Spa Wellness Chatbot"
+    },
+    "description": {
+      "id": "Asisten virtual untuk layanan kesehatan dan pemesanan spa.",
+      "en": "Virtual assistant for wellness services and spa bookings."
+    },
+    "useIcon": true,
+    "mainIcon": "mdi:spa",
+    "iconLabel": "Spa Wellness Chatbot",
+    "backgroundIcons": [
+      "mdi:chat",
+      "mdi:leaf",
+      "mdi:heart-pulse",
+      "mdi:meditation"
+    ],
+    "gradientFrom": "from-teal-500",
+    "gradientTo": "to-cyan-600",
+    "stack": [
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "PHP",
+      "MySQL"
+    ],
+    "githubUrl": "https://github.com/rank1unlock/Chatbot_ci3",
+    "canvaEmbedUrl": "https://www.canva.com/design/DAGwrYBhh0Y/54rqMMfUDSlYA_5gaJeTNw/view?embed",
+    "canvaExternalUrl": "https://www.canva.com/design/DAGwrYBhh0Y/54rqMMfUDSlYA_5gaJeTNw/view?utm_content=DAGwrYBhh0Y&utm_campaign=designshare&utm_medium=embeds&utm_source=link",
+    "canvaTitle": "Presentation - Spa Wellness Chatbot Program",
+    "canvaAuthor": "Vincent axel",
+    "liveUrl": null
+  },
+  {
+    "id": 4,
+    "title": {
+      "id": "Website E-commerce",
+      "en": "E-commerce Website"
+    },
+    "description": {
+      "id": "Platform belanja online yang responsif dengan Django.",
+      "en": "Responsive online shopping platform built with Django."
+    },
+    "useIcon": true,
+    "mainIcon": "mdi:storefront",
+    "iconLabel": "E-commerce Website",
+    "backgroundIcons": [
+      "mdi:shopping-cart",
+      "mdi:credit-card",
+      "mdi:package-variant",
+      "mdi:trending-up"
+    ],
+    "gradientFrom": "from-orange-500",
+    "gradientTo": "to-red-600",
+    "stack": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Python",
+      "Django"
+    ],
+    "githubUrl": "https://github.com/rank1unlock/E-Commerce_Program",
+    "canvaEmbedUrl": "https://www.canva.com/design/DAGwtNeprNY/IWTSuSwQRdSr4Teu-FM7UQ/view?embed",
+    "canvaExternalUrl": "https://www.canva.com/design/DAGwtNeprNY/IWTSuSwQRdSr4Teu-FM7UQ/view?utm_content=DAGwtNeprNY&utm_campaign=designshare&utm_medium=embeds&utm_source=link",
+    "canvaTitle": "Presentation - E-commerce Website Project Overview",
+    "canvaAuthor": "Vincent axel",
+    "liveUrl": null
+  },
+  {
+    "id": 5,
+    "title": {
+      "id": "Chatbot Akademik BERT",
+      "en": "Academic Chatbot"
+    },
+    "description": {
+      "id": "Chatbot cerdas menggunakan algoritma BERT untuk menjawab pertanyaan akademik.",
+      "en": "Intelligent chatbot using BERT algorithm to answer academic queries."
+    },
+    "useIcon": true,
+    "mainIcon": "mdi:chat",
+    "iconLabel": "Academic Chatbot",
+    "backgroundIcons": [
+      "mdi:chat",
+      "mdi:book-open",
+      "mdi:brain",
+      "mdi:test-tube"
+    ],
+    "gradientFrom": "from-purple-500",
+    "gradientTo": "to-indigo-600",
+    "stack": [
+      "Python",
+      "BERT Algorithm",
+      "CodeIgniter",
+      "MySQL"
+    ],
+    "githubUrl": "https://github.com/rank1unlock/Chatbot_Akademik",
+    "canvaEmbedUrl": "https://www.canva.com/design/DAG8l5BBtvY/view?embed",
+    "canvaExternalUrl": "https://www.canva.com/design/DAG8l5BBtvY/bilpJjOm8-R0RkJky4c7gA/view?utm_content=DAG8l5BBtvY&utm_campaign=designshare&utm_medium=embeds&utm_source=link",
+    "canvaTitle": "Presentation - Academic Chatbot Project",
+    "canvaAuthor": "Vincent Axel",
+    "liveUrl": null
+  }
+]
