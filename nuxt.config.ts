@@ -24,6 +24,12 @@ export default defineNuxtConfig({
       },
     }
   },
+
+  runtimeConfig: {
+    public: {
+      adminPassword: process.env.ADMIN_PASSWORD || 'passwordCadangan123'
+    }
+  },
   
   compatibilityDate: '2025-05-15',
 })

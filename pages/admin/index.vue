@@ -1,21 +1,49 @@
 <template>
   <div class="min-h-screen bg-slate-900 text-slate-200 p-4 md:p-8">
-    <div class="max-w-5xl mx-auto">
-      <div class="flex justify-between items-center mb-10">
-        <div>
-          <h1
-            class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+    
+    <div v-if="!isAuthenticated" class="flex flex-col items-center justify-center min-h-[80vh]">
+      <div class="bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl w-full max-w-md text-center">
+        <div class="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Icon name="mdi:lock" class="w-8 h-8 text-purple-400" />
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Area Terlarang</h2>
+        <p class="text-slate-400 mb-6 text-sm">Masukkan kata sandi untuk mengakses CMS Portofolio.</p>
+        
+        <form @submit.prevent="handleLogin" class="space-y-4">
+          <input 
+            type="password" 
+            v-model="passwordInput" 
+            placeholder="Kata Sandi..." 
+            class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+          />
+          <p v-if="loginError" class="text-red-400 text-xs text-left">{{ loginError }}</p>
+          <button 
+            type="submit" 
+            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"
           >
+            Buka Kunci
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div v-else class="max-w-5xl mx-auto">
+      <div class="flex flex-wrap justify-between items-center mb-10 gap-4">
+        <div>
+          <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             Portfolio Manager
           </h1>
           <p class="text-slate-400">Update Proyek, Sertifikat & Testimoni</p>
         </div>
-        <NuxtLink
-          to="/"
-          class="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition text-sm flex items-center gap-2"
-        >
-          <Icon name="mdi:arrow-left" /> Lihat Portofolio
-        </NuxtLink>
+        <div class="flex items-center gap-3">
+          <button @click="handleLogout" class="px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/30 rounded-lg transition text-sm flex items-center gap-2">
+            <Icon name="mdi:lock-outline" /> Kunci
+          </button>
+          
+          <NuxtLink to="/" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition text-sm flex items-center gap-2">
+            <Icon name="mdi:arrow-left" /> Lihat Portofolio
+          </NuxtLink>
+        </div>
       </div>
 
       <div class="mb-20">
@@ -464,7 +492,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="mb-20">
         <h2 class="text-2xl font-bold mb-6 text-green-400 border-b border-slate-700 pb-2">
           Manajemen Testimoni
         </h2>
@@ -768,7 +796,42 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+
+// ==========================================
+// SISTEM KEAMANAN (LOGIN SESSION & ENV)
+// ==========================================
+const isAuthenticated = ref(false);
+const passwordInput = ref('');
+const loginError = ref('');
+
+// Mengambil password dari file .env (Atau 'passwordCadangan123' jika .env kosong)
+const config = useRuntimeConfig();
+const SECRET_PASSWORD = config.public.adminPassword; 
+
+// Mengecek apakah sebelumnya sudah login (di tab yang sama)
+onMounted(() => {
+  if (sessionStorage.getItem('admin_unlocked') === 'true') {
+    isAuthenticated.value = true;
+  }
+});
+
+const handleLogin = () => {
+  if (passwordInput.value === SECRET_PASSWORD) {
+    isAuthenticated.value = true;
+    loginError.value = '';
+    // Simpan kunci di sessionStorage (Otomatis terhapus jika tab ditutup)
+    sessionStorage.setItem('admin_unlocked', 'true');
+  } else {
+    loginError.value = 'Kata sandi salah! Akses ditolak.';
+    passwordInput.value = '';
+  }
+};
+
+const handleLogout = () => {
+  isAuthenticated.value = false;
+  sessionStorage.removeItem('admin_unlocked');
+};
 
 // ==========================================
 // STATE PROYEK
@@ -864,7 +927,7 @@ const { data: certificates, refresh: refreshCerts } = await useFetch('/api/certi
 const isEditingCert = ref(false);
 const certSkillsInput = ref('');
 const isUploading = ref(false);
-const isUploadingDoc = ref(false); // STATE BARU: Untuk loading upload dokumen PDF/File
+const isUploadingDoc = ref(false); 
 
 const certForm = ref({
   id: null,
@@ -873,12 +936,11 @@ const certForm = ref({
   date: { id: '', en: '' },
   imageUrl: '',
   driveUrl: '',
-  documentUrl: '', // STATE BARU: Untuk menyimpan link file lokal
+  documentUrl: '', 
   categoryId: 'programming',
   skills: []
 });
 
-// Fungsi upload Tumbnail/Gambar Sertifikat
 const handleFileUpload = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -904,7 +966,6 @@ const handleFileUpload = async (event) => {
   }
 };
 
-// FUNGSI BARU: Upload file Dokumen (PDF/Gambar resolusi tinggi) untuk opsi download
 const handleCertDocumentUpload = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -920,7 +981,6 @@ const handleCertDocumentUpload = async (event) => {
     });
     
     if (response.imageUrl) {
-      // Kita simpan di documentUrl, dan kosongkan driveUrl agar tidak bentrok
       certForm.value.documentUrl = response.imageUrl;
       certForm.value.driveUrl = ''; 
     }
