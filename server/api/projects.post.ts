@@ -1,23 +1,16 @@
-import { serverSupabaseServiceRole } from '#supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export default defineEventHandler(async (event) => {
-  const client = serverSupabaseServiceRole(event)
-  const body = await readBody(event) // Data dari form Admin
+  const config = useRuntimeConfig()
+  const client = createClient(config.supabaseUrl, config.supabaseKey)
+  const body = await readBody(event)
 
-  // 1. Hapus semua data lama (karena kita akan replace semua)
   await client.from('projects').delete().neq('id', 0)
 
-  // 2. Masukkan data baru ke tabel
   if (body && body.length > 0) {
-    // Format datanya: kolom id diisi ID, kolom data diisi JSON
-    const insertData = body.map((item: any) => ({ 
-      id: item.id, 
-      data: item 
-    }))
-    
+    const insertData = body.map((item: any) => ({ id: item.id, data: item }))
     const { error } = await client.from('projects').insert(insertData)
     if (error) throw createError({ statusCode: 500, message: error.message })
   }
-
   return { status: 'success' }
 })

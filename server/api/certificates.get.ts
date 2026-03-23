@@ -1,16 +1,10 @@
-import { serverSupabaseServiceRole } from '#supabase/server'
+import { createClient } from '@supabase/supabase-js'
 
 export default defineEventHandler(async (event) => {
-  const client = serverSupabaseServiceRole(event)
+  const config = useRuntimeConfig()
+  const client = createClient(config.supabaseUrl, config.supabaseKey)
   
-  // Ambil semua data dari tabel 'certificates'
   const { data, error } = await client.from('certificates').select('data')
-  
-  if (error) {
-    console.error('Error GET certificates:', error)
-    return []
-  }
-  
-  // Format ulang data agar sesuai dengan yang dibaca oleh Vue
+  if (error) return []
   return data.map((item: any) => item.data)
 })

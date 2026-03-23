@@ -24,6 +24,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     adminPassword: process.env.ADMIN_PASSWORD || 'passwordCadangan123',
+    supabaseUrl: process.env.SUPABASE_URL,
+    supabaseKey: process.env.SUPABASE_KEY,
     public: {
     }
   },
