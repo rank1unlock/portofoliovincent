@@ -1,24 +1,29 @@
 <template>
   <div class="min-h-screen bg-slate-900 text-slate-200 p-4 md:p-8">
-    
     <div v-if="!isAuthenticated" class="flex flex-col items-center justify-center min-h-[80vh]">
-      <div class="bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl w-full max-w-md text-center">
-        <div class="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div
+        class="bg-slate-800 p-8 rounded-xl border border-slate-700 shadow-2xl w-full max-w-md text-center"
+      >
+        <div
+          class="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4"
+        >
           <Icon name="mdi:lock" class="w-8 h-8 text-purple-400" />
         </div>
         <h2 class="text-2xl font-bold mb-2">Area Terlarang</h2>
-        <p class="text-slate-400 mb-6 text-sm">Masukkan kata sandi untuk mengakses CMS Portofolio.</p>
-        
+        <p class="text-slate-400 mb-6 text-sm">
+          Masukkan kata sandi untuk mengakses CMS Portofolio.
+        </p>
+
         <form @submit.prevent="handleLogin" class="space-y-4">
-          <input 
-            type="password" 
-            v-model="passwordInput" 
-            placeholder="Kata Sandi..." 
+          <input
+            type="password"
+            v-model="passwordInput"
+            placeholder="Kata Sandi..."
             class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
           />
           <p v-if="loginError" class="text-red-400 text-xs text-left">{{ loginError }}</p>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"
           >
             Buka Kunci
@@ -30,17 +35,25 @@
     <div v-else class="max-w-5xl mx-auto">
       <div class="flex flex-wrap justify-between items-center mb-10 gap-4">
         <div>
-          <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+          <h1
+            class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+          >
             Portfolio Manager
           </h1>
           <p class="text-slate-400">Update Proyek, Sertifikat & Testimoni</p>
         </div>
         <div class="flex items-center gap-3">
-          <button @click="handleLogout" class="px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/30 rounded-lg transition text-sm flex items-center gap-2">
+          <button
+            @click="handleLogout"
+            class="px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/30 rounded-lg transition text-sm flex items-center gap-2"
+          >
             <Icon name="mdi:lock-outline" /> Kunci
           </button>
-          
-          <NuxtLink to="/" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition text-sm flex items-center gap-2">
+
+          <NuxtLink
+            to="/"
+            class="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition text-sm flex items-center gap-2"
+          >
             <Icon name="mdi:arrow-left" /> Lihat Portofolio
           </NuxtLink>
         </div>
@@ -796,49 +809,57 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue'
 
 // ==========================================
 // SISTEM KEAMANAN (LOGIN SESSION & ENV)
 // ==========================================
-const isAuthenticated = ref(false);
-const passwordInput = ref('');
-const loginError = ref('');
+const isAuthenticated = ref(false)
+const passwordInput = ref('')
+const loginError = ref('')
 
-// Mengambil password dari file .env (Atau 'passwordCadangan123' jika .env kosong)
-const config = useRuntimeConfig();
-const SECRET_PASSWORD = config.public.adminPassword; 
 
-// Mengecek apakah sebelumnya sudah login (di tab yang sama)
+const config = useRuntimeConfig()
+const SECRET_PASSWORD = config.public.adminPassword
+
+
 onMounted(() => {
   if (sessionStorage.getItem('admin_unlocked') === 'true') {
-    isAuthenticated.value = true;
+    isAuthenticated.value = true
   }
-});
+})
 
-const handleLogin = () => {
-  if (passwordInput.value === SECRET_PASSWORD) {
-    isAuthenticated.value = true;
-    loginError.value = '';
-    // Simpan kunci di sessionStorage (Otomatis terhapus jika tab ditutup)
-    sessionStorage.setItem('admin_unlocked', 'true');
-  } else {
-    loginError.value = 'Kata sandi salah! Akses ditolak.';
-    passwordInput.value = '';
+const handleLogin = async () => {
+  try {
+    const response = await $fetch('/api/verify', {
+      method: 'POST',
+      body: { password: passwordInput.value }
+    })
+
+    if (response.success) {
+      isAuthenticated.value = true
+      loginError.value = ''
+      sessionStorage.setItem('admin_unlocked', 'true')
+    } else {
+      loginError.value = 'Kata sandi salah! Akses ditolak.'
+      passwordInput.value = ''
+    }
+  } catch (error) {
+    loginError.value = 'Terjadi kesalahan sistem.'
   }
-};
+}
 
 const handleLogout = () => {
-  isAuthenticated.value = false;
-  sessionStorage.removeItem('admin_unlocked');
-};
+  isAuthenticated.value = false
+  sessionStorage.removeItem('admin_unlocked')
+}
 
 // ==========================================
 // STATE PROYEK
 // ==========================================
-const { data: projects, refresh: refreshProjects } = await useFetch('/api/projects');
-const isEditing = ref(false);
-const stackInput = ref('');
+const { data: projects, refresh: refreshProjects } = await useFetch('/api/projects')
+const isEditing = ref(false)
+const stackInput = ref('')
 
 const form = ref({
   id: Date.now(),
@@ -865,50 +886,61 @@ const form = ref({
   canvaExternalUrl: null,
   canvaTitle: '',
   canvaAuthor: ''
-});
+})
 
 const saveProject = async () => {
-  form.value.stack = stackInput.value.split(',').map(s => s.trim()).filter(s => s !== '');
-  let updatedData = projects.value ? [...projects.value] : [];
+  form.value.stack = stackInput.value
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s !== '')
+  let updatedData = projects.value ? [...projects.value] : []
 
   if (isEditing.value) {
-    const index = updatedData.findIndex(p => p.id === form.value.id);
-    updatedData[index] = { ...form.value };
+    const index = updatedData.findIndex((p) => p.id === form.value.id)
+    updatedData[index] = { ...form.value }
   } else {
-    updatedData.push({ ...form.value, id: Date.now() });
+    updatedData.push({ ...form.value, id: Date.now() })
   }
 
-  await $fetch('/api/projects', { method: 'POST', body: updatedData });
-  alert('Proyek Berhasil Disimpan!');
-  resetForm();
-  refreshProjects();
-};
+  await $fetch('/api/projects', { method: 'POST', body: updatedData })
+  alert('Proyek Berhasil Disimpan!')
+  resetForm()
+  refreshProjects()
+}
 
 const deleteProject = async (id) => {
-  if (!confirm('Yakin ingin menghapus proyek ini?')) return;
-  const updatedData = projects.value.filter(p => p.id !== id);
-  await $fetch('/api/projects', { method: 'POST', body: updatedData });
-  refreshProjects();
-};
+  if (!confirm('Yakin ingin menghapus proyek ini?')) return
+  const updatedData = projects.value.filter((p) => p.id !== id)
+  await $fetch('/api/projects', { method: 'POST', body: updatedData })
+  refreshProjects()
+}
 
 const editProject = (item) => {
-  isEditing.value = true;
-  form.value = JSON.parse(JSON.stringify(item)); 
-  stackInput.value = item.stack ? item.stack.join(', ') : '';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
+  isEditing.value = true
+  form.value = JSON.parse(JSON.stringify(item))
+  stackInput.value = item.stack ? item.stack.join(', ') : ''
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 
 const resetForm = () => {
-  isEditing.value = false;
-  stackInput.value = '';
+  isEditing.value = false
+  stackInput.value = ''
   form.value = {
-    id: null, title: { id: '', en: '' }, description: { id: '', en: '' },
-    useIcon: true, mainIcon1: '', iconLabel1: '', // Reset lainnya bisa disesuaikan jika perlu
+    id: null,
+    title: { id: '', en: '' },
+    description: { id: '', en: '' },
+    useIcon: true,
+    mainIcon1: '',
+    iconLabel1: '', 
     backgroundIcons: ['mdi:code-tags', 'mdi:palette', 'mdi:responsive', 'mdi:star'],
-    gradientFrom: 'from-blue-600', gradientTo: 'to-purple-600',
-    stack: [], githubUrl: '', canvaEmbedUrl: '', liveUrl: ''
-  };
-};
+    gradientFrom: 'from-blue-600',
+    gradientTo: 'to-purple-600',
+    stack: [],
+    githubUrl: '',
+    canvaEmbedUrl: '',
+    liveUrl: ''
+  }
+}
 
 // ==========================================
 // STATE SERTIFIKAT
@@ -920,14 +952,14 @@ const categories = [
   { id: 'best-practice', label: { id: 'Best Practice', en: 'Best Practice' } },
   { id: 'management', label: { id: 'Manajemen', en: 'Management' } },
   { id: 'legal', label: { id: 'Legal', en: 'Legal' } },
-  { id: 'languages', label: { id: 'Bahasa', en: 'Languages' } },
-];
+  { id: 'languages', label: { id: 'Bahasa', en: 'Languages' } }
+]
 
-const { data: certificates, refresh: refreshCerts } = await useFetch('/api/certificates');
-const isEditingCert = ref(false);
-const certSkillsInput = ref('');
-const isUploading = ref(false);
-const isUploadingDoc = ref(false); 
+const { data: certificates, refresh: refreshCerts } = await useFetch('/api/certificates')
+const isEditingCert = ref(false)
+const certSkillsInput = ref('')
+const isUploading = ref(false)
+const isUploadingDoc = ref(false)
 
 const certForm = ref({
   id: null,
@@ -936,120 +968,130 @@ const certForm = ref({
   date: { id: '', en: '' },
   imageUrl: '',
   driveUrl: '',
-  documentUrl: '', 
+  documentUrl: '',
   categoryId: 'programming',
   skills: []
-});
+})
 
 const handleFileUpload = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]
+  if (!file) return
 
-  isUploading.value = true;
-  const formData = new FormData();
-  formData.append('file', file);
+  isUploading.value = true
+  const formData = new FormData()
+  formData.append('file', file)
 
   try {
     const response = await $fetch('/api/upload', {
       method: 'POST',
       body: formData
-    });
-    
+    })
+
     if (response.imageUrl) {
-      certForm.value.imageUrl = response.imageUrl;
+      certForm.value.imageUrl = response.imageUrl
     }
   } catch (error) {
-    console.error('Upload error:', error);
-    alert('Gagal mengupload gambar.');
+    console.error('Upload error:', error)
+    alert('Gagal mengupload gambar.')
   } finally {
-    isUploading.value = false;
+    isUploading.value = false
   }
-};
+}
 
 const handleCertDocumentUpload = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]
+  if (!file) return
 
-  isUploadingDoc.value = true;
-  const formData = new FormData();
-  formData.append('file', file);
+  isUploadingDoc.value = true
+  const formData = new FormData()
+  formData.append('file', file)
 
   try {
     const response = await $fetch('/api/upload', {
       method: 'POST',
       body: formData
-    });
-    
+    })
+
     if (response.imageUrl) {
-      certForm.value.documentUrl = response.imageUrl;
-      certForm.value.driveUrl = ''; 
+      certForm.value.documentUrl = response.imageUrl
+      certForm.value.driveUrl = ''
     }
   } catch (error) {
-    console.error('Upload document error:', error);
-    alert('Gagal mengupload dokumen.');
+    console.error('Upload document error:', error)
+    alert('Gagal mengupload dokumen.')
   } finally {
-    isUploadingDoc.value = false;
+    isUploadingDoc.value = false
   }
-};
+}
 
 const saveCertificate = async () => {
-  const skillArray = certSkillsInput.value.split(',').map(s => s.trim()).filter(s => s !== '');
-  let updatedCerts = certificates.value ? [...certificates.value] : [];
-  
-  const selectedCat = categories.find(c => c.id === certForm.value.categoryId);
-  
-  const newCert = { 
-    ...certForm.value, 
+  const skillArray = certSkillsInput.value
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s !== '')
+  let updatedCerts = certificates.value ? [...certificates.value] : []
+
+  const selectedCat = categories.find((c) => c.id === certForm.value.categoryId)
+
+  const newCert = {
+    ...certForm.value,
     id: certForm.value.id || Date.now(),
     skills: skillArray,
     categoryLabel: selectedCat ? selectedCat.label : { id: 'Lainnya', en: 'Others' }
-  };
-
-  newCert.issuer.en = newCert.issuer.id;
-  newCert.date.en = newCert.date.id;
-
-  if (isEditingCert.value) {
-    const idx = updatedCerts.findIndex(c => c.id === certForm.value.id);
-    updatedCerts[idx] = newCert;
-  } else {
-    updatedCerts.push(newCert);
   }
 
-  await $fetch('/api/certificates', { method: 'POST', body: updatedCerts });
-  alert('Sertifikat Berhasil Disimpan!');
-  resetCertForm();
-  refreshCerts();
-};
+  newCert.issuer.en = newCert.issuer.id
+  newCert.date.en = newCert.date.id
+
+  if (isEditingCert.value) {
+    const idx = updatedCerts.findIndex((c) => c.id === certForm.value.id)
+    updatedCerts[idx] = newCert
+  } else {
+    updatedCerts.push(newCert)
+  }
+
+  await $fetch('/api/certificates', { method: 'POST', body: updatedCerts })
+  alert('Sertifikat Berhasil Disimpan!')
+  resetCertForm()
+  refreshCerts()
+}
 
 const deleteCertificate = async (id) => {
-  if (!confirm('Yakin ingin menghapus sertifikat ini?')) return;
-  const updatedData = certificates.value.filter(c => c.id !== id);
-  await $fetch('/api/certificates', { method: 'POST', body: updatedData });
-  refreshCerts();
-};
+  if (!confirm('Yakin ingin menghapus sertifikat ini?')) return
+  const updatedData = certificates.value.filter((c) => c.id !== id)
+  await $fetch('/api/certificates', { method: 'POST', body: updatedData })
+  refreshCerts()
+}
 
 const editCertificate = (cert) => {
-  isEditingCert.value = true;
-  certForm.value = JSON.parse(JSON.stringify(cert)); 
-  certSkillsInput.value = cert.skills ? cert.skills.join(', ') : '';
-  window.scrollTo({ top: document.body.scrollHeight / 2, behavior: 'smooth' });
-};
+  isEditingCert.value = true
+  certForm.value = JSON.parse(JSON.stringify(cert))
+  certSkillsInput.value = cert.skills ? cert.skills.join(', ') : ''
+  window.scrollTo({ top: document.body.scrollHeight / 2, behavior: 'smooth' })
+}
 
 const resetCertForm = () => {
-  isEditingCert.value = false;
-  certSkillsInput.value = '';
+  isEditingCert.value = false
+  certSkillsInput.value = ''
   certForm.value = {
-    id: null, title: { id: '', en: '' }, issuer: { id: '', en: '' }, date: { id: '', en: '' },
-    imageUrl: '', driveUrl: '', documentUrl: '', categoryId: 'programming', skills: []
-  };
-};
+    id: null,
+    title: { id: '', en: '' },
+    issuer: { id: '', en: '' },
+    date: { id: '', en: '' },
+    imageUrl: '',
+    driveUrl: '',
+    documentUrl: '',
+    categoryId: 'programming',
+    skills: []
+  }
+}
 
 // ==========================================
 // STATE TESTIMONI
 // ==========================================
-const { data: testimonials, refresh: refreshTestimonials } = await useFetch('/api/testimonials');
-const isEditingTesti = ref(false);
-const isUploadingTesti = ref(false);
+const { data: testimonials, refresh: refreshTestimonials } = await useFetch('/api/testimonials')
+const isEditingTesti = ref(false)
+const isUploadingTesti = ref(false)
 
 const testiForm = ref({
   id: null,
@@ -1057,160 +1099,163 @@ const testiForm = ref({
   title: { id: '', en: '' },
   quote: { id: '', en: '' },
   imageUrl: ''
-});
+})
 
 const handleTestiUpload = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  isUploadingTesti.value = true;
-  
-  const formData = new FormData();
-  formData.append('file', file);
+  const file = event.target.files[0]
+  if (!file) return
+  isUploadingTesti.value = true
+
+  const formData = new FormData()
+  formData.append('file', file)
 
   try {
-    const response = await $fetch('/api/upload', { method: 'POST', body: formData });
-    if (response.imageUrl) testiForm.value.imageUrl = response.imageUrl;
+    const response = await $fetch('/api/upload', { method: 'POST', body: formData })
+    if (response.imageUrl) testiForm.value.imageUrl = response.imageUrl
   } catch (error) {
-    alert('Gagal mengupload foto.');
+    alert('Gagal mengupload foto.')
   } finally {
-    isUploadingTesti.value = false;
+    isUploadingTesti.value = false
   }
-};
+}
 
 const saveTestimonial = async () => {
   try {
-    let updatedData = testimonials.value ? [...testimonials.value] : [];
-    
-    testiForm.value.name.en = testiForm.value.name.id;
-    testiForm.value.title.en = testiForm.value.title.id;
+    let updatedData = testimonials.value ? [...testimonials.value] : []
 
-    const newData = { 
-      ...testiForm.value, 
-      id: testiForm.value.id || Date.now() 
-    };
+    testiForm.value.name.en = testiForm.value.name.id
+    testiForm.value.title.en = testiForm.value.title.id
 
-    if (isEditingTesti.value) {
-      const idx = updatedData.findIndex(t => t.id === testiForm.value.id);
-      if (idx !== -1) updatedData[idx] = newData;
-    } else {
-      updatedData.push(newData);
+    const newData = {
+      ...testiForm.value,
+      id: testiForm.value.id || Date.now()
     }
 
-    await $fetch('/api/testimonials', { 
-      method: 'POST', 
-      body: updatedData 
-    });
+    if (isEditingTesti.value) {
+      const idx = updatedData.findIndex((t) => t.id === testiForm.value.id)
+      if (idx !== -1) updatedData[idx] = newData
+    } else {
+      updatedData.push(newData)
+    }
 
-    alert('Testimoni Berhasil Disimpan!');
-    resetTestiForm();
-    await refreshTestimonials();
+    await $fetch('/api/testimonials', {
+      method: 'POST',
+      body: updatedData
+    })
 
+    alert('Testimoni Berhasil Disimpan!')
+    resetTestiForm()
+    await refreshTestimonials()
   } catch (error) {
-    console.error('Error saat simpan testimoni:', error);
-    alert('Gagal menyimpan testimoni! Buka Inspect Element (F12) tab Console untuk melihat error.');
+    console.error('Error saat simpan testimoni:', error)
+    alert('Gagal menyimpan testimoni! Buka Inspect Element (F12) tab Console untuk melihat error.')
   }
-};
+}
 
 const editTestimonial = (testi) => {
-  isEditingTesti.value = true;
-  testiForm.value = JSON.parse(JSON.stringify(testi));
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-};
+  isEditingTesti.value = true
+  testiForm.value = JSON.parse(JSON.stringify(testi))
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+}
 
 const deleteTestimonial = async (id) => {
-  if (!confirm('Hapus testimoni ini?')) return;
-  const updatedData = testimonials.value.filter(t => t.id !== id);
-  await $fetch('/api/testimonials', { method: 'POST', body: updatedData });
-  refreshTestimonials();
-};
+  if (!confirm('Hapus testimoni ini?')) return
+  const updatedData = testimonials.value.filter((t) => t.id !== id)
+  await $fetch('/api/testimonials', { method: 'POST', body: updatedData })
+  refreshTestimonials()
+}
 
 const resetTestiForm = () => {
-  isEditingTesti.value = false;
-  testiForm.value = { id: null, name: { id: '', en: '' }, title: { id: '', en: '' }, quote: { id: '', en: '' }, imageUrl: '' };
-};
+  isEditingTesti.value = false
+  testiForm.value = {
+    id: null,
+    name: { id: '', en: '' },
+    title: { id: '', en: '' },
+    quote: { id: '', en: '' },
+    imageUrl: ''
+  }
+}
 
 // ==========================================
 // STATE VIDEO INTRO
 // ==========================================
-const { data: videos, refresh: refreshVideos } = await useFetch('/api/videos');
-const isEditingVideo = ref(false);
-const isUploadingVideo = ref(false);
+const { data: videos, refresh: refreshVideos } = await useFetch('/api/videos')
+const isEditingVideo = ref(false)
+const isUploadingVideo = ref(false)
 
 const videoForm = ref({
   id: null,
   title: { id: '', en: '' },
-  videoUrl: '' 
-});
+  videoUrl: ''
+})
 
 const handleVideoUpload = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  isUploadingVideo.value = true;
-  
-  const formData = new FormData();
-  formData.append('file', file);
+  const file = event.target.files[0]
+  if (!file) return
+  isUploadingVideo.value = true
+
+  const formData = new FormData()
+  formData.append('file', file)
 
   try {
-    const response = await $fetch('/api/upload', { method: 'POST', body: formData });
+    const response = await $fetch('/api/upload', { method: 'POST', body: formData })
     if (response.imageUrl) {
-      videoForm.value.videoUrl = response.imageUrl; 
+      videoForm.value.videoUrl = response.imageUrl
     }
   } catch (error) {
-    alert('Gagal mengupload video. Pastikan ukuran file tidak melebihi limit server.');
+    alert('Gagal mengupload video. Pastikan ukuran file tidak melebihi limit server.')
   } finally {
-    isUploadingVideo.value = false;
+    isUploadingVideo.value = false
   }
-};
+}
 
 const saveVideo = async () => {
   try {
-    let updatedData = videos.value ? [...videos.value] : [];
-    
-    const newData = { 
-      ...videoForm.value, 
-      id: videoForm.value.id || Date.now() 
-    };
+    let updatedData = videos.value ? [...videos.value] : []
 
-    if (isEditingVideo.value) {
-      const idx = updatedData.findIndex(v => v.id === videoForm.value.id);
-      if (idx !== -1) updatedData[idx] = newData;
-    } else {
-      updatedData.push(newData);
+    const newData = {
+      ...videoForm.value,
+      id: videoForm.value.id || Date.now()
     }
 
-    await $fetch('/api/videos', { 
-      method: 'POST', 
-      body: updatedData 
-    });
+    if (isEditingVideo.value) {
+      const idx = updatedData.findIndex((v) => v.id === videoForm.value.id)
+      if (idx !== -1) updatedData[idx] = newData
+    } else {
+      updatedData.push(newData)
+    }
 
-    alert('Video Berhasil Disimpan!');
-    resetVideoForm();
-    await refreshVideos();
+    await $fetch('/api/videos', {
+      method: 'POST',
+      body: updatedData
+    })
 
+    alert('Video Berhasil Disimpan!')
+    resetVideoForm()
+    await refreshVideos()
   } catch (error) {
-    console.error('Error saat simpan video:', error);
-    alert('Gagal menyimpan video!');
+    console.error('Error saat simpan video:', error)
+    alert('Gagal menyimpan video!')
   }
-};
+}
 
 const editVideo = (video) => {
-  isEditingVideo.value = true;
-  videoForm.value = JSON.parse(JSON.stringify(video));
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-};
+  isEditingVideo.value = true
+  videoForm.value = JSON.parse(JSON.stringify(video))
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+}
 
 const deleteVideo = async (id) => {
-  if (!confirm('Hapus video ini?')) return;
-  const updatedData = videos.value.filter(v => v.id !== id);
-  await $fetch('/api/videos', { method: 'POST', body: updatedData });
-  refreshVideos();
-};
+  if (!confirm('Hapus video ini?')) return
+  const updatedData = videos.value.filter((v) => v.id !== id)
+  await $fetch('/api/videos', { method: 'POST', body: updatedData })
+  refreshVideos()
+}
 
 const resetVideoForm = () => {
-  isEditingVideo.value = false;
-  videoForm.value = { id: null, title: { id: '', en: '' }, videoUrl: '' };
-};
-
+  isEditingVideo.value = false
+  videoForm.value = { id: null, title: { id: '', en: '' }, videoUrl: '' }
+}
 </script>
 
 <style scoped>

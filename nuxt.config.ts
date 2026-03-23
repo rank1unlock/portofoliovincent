@@ -1,16 +1,15 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
   
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/icon',
-    '@nuxtjs/supabase' // <-- Perbaikan nama modul (pakai js)
+    '@nuxtjs/supabase' 
   ],
   
   supabase: {
-    redirect: false // Sangat penting agar halamanmu tidak di-lock
-  }, // <-- PERBAIKAN: Tambahan koma di sini sangat penting!
+    redirect: false 
+  },
   
   css: [ 
     '@/assets/css/main.css',
@@ -19,15 +18,13 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        // Anda bisa mengatur bahasa default di sini jika mau
-        // lang: 'id' 
       },
     }
   },
 
   runtimeConfig: {
+    adminPassword: process.env.ADMIN_PASSWORD || 'passwordCadangan123',
     public: {
-      adminPassword: process.env.ADMIN_PASSWORD || 'passwordCadangan123'
     }
   },
   
