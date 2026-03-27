@@ -1,31 +1,29 @@
 <template>
-  <section id="about" ref="target" class="section-about py-20 px-4 md:px-8 lg:px-12 overflow-hidden relative">
-    <!-- Enhanced Background Elements -->
+  <section
+    id="about"
+    ref="target"
+    class="section-about py-20 px-4 md:px-8 lg:px-12 overflow-hidden relative"
+  >
     <div class="background-container">
-      <!-- Animated gradient orbs -->
       <div class="gradient-orbs">
         <div class="gradient-orb orb-1"></div>
         <div class="gradient-orb orb-2"></div>
         <div class="gradient-orb orb-3"></div>
         <div class="gradient-orb orb-4"></div>
       </div>
-      
-      <!-- Flowing particles with 3D effect -->
+
       <div class="particles-container">
         <div class="particle" v-for="i in 40" :key="i" :style="getParticleStyle(i)"></div>
       </div>
-      
-      <!-- Geometric patterns -->
+
       <div class="geometric-patterns">
         <div class="pattern pattern-1"></div>
         <div class="pattern pattern-2"></div>
         <div class="pattern pattern-3"></div>
       </div>
-      
-      <!-- Dynamic grid -->
+
       <div class="dynamic-grid"></div>
-      
-      <!-- Light beams -->
+
       <div class="light-beams">
         <div class="beam beam-1"></div>
         <div class="beam beam-2"></div>
@@ -34,7 +32,6 @@
     </div>
 
     <div class="container mx-auto max-w-7xl relative z-10">
-      <!-- Section header with decorative elements -->
       <div class="section-header text-center mb-16">
         <div class="header-decoration">
           <div class="deco-line line-left"></div>
@@ -43,52 +40,49 @@
           </div>
           <div class="deco-line line-right"></div>
         </div>
-        <h2 
+        <h2
           class="section-title text-5xl md:text-6xl font-black mb-4"
           :class="targetIsVisible ? 'active' : ''"
         >
           {{ T.about.title[lang] }}
         </h2>
-        <p class="section-subtitle text-lg text-gray-400 max-w-2xl mx-auto" :class="targetIsVisible ? 'active' : ''">
-          {{ T.about.subtitle?.[lang] || "Get to know more about my background and expertise" }}
+        <p
+          class="section-subtitle text-lg text-gray-400 max-w-2xl mx-auto"
+          :class="targetIsVisible ? 'active' : ''"
+        >
+          {{ T.about.subtitle?.[lang] || 'Get to know more about my background and expertise' }}
         </p>
       </div>
 
       <div class="content-grid grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-        
-        <!-- Left Column - Profile & Contact -->
         <div class="profile-column lg:col-span-1">
           <div class="profile-card" :class="targetIsVisible ? 'active' : ''">
-            <!-- Enhanced profile image container -->
             <div class="profile-image-wrapper">
               <div class="image-decorations">
                 <div class="deco-ring ring-1"></div>
                 <div class="deco-ring ring-2"></div>
                 <div class="deco-ring ring-3"></div>
               </div>
-              
+
               <div class="image-glow"></div>
-              
-              <img 
-                src="/images/foto.png" 
-                alt="Vincent Axel Alexander - Professional Portfolio Photo" 
+
+              <img
+                src="/images/foto.png"
+                alt="Vincent Axel Alexander - Professional Portfolio Photo"
                 class="profile-image"
                 loading="lazy"
-              >
-              
-              <!-- Status indicator -->
+              />
+
               <div class="status-indicator">
                 <div class="status-dot"></div>
-                <span class="status-text">{{ T.about.status?.[lang] || "Available" }}</span>
+                <span class="status-text">{{ T.about.status?.[lang] || 'Available' }}</span>
               </div>
             </div>
-            
-            <!-- Profile info -->
+
             <div class="profile-info">
               <h3 class="profile-name">Vincent Axel Alexander</h3>
-              <p class="profile-role">{{ T.about.role?.[lang] || "Full Stack Developer" }}</p>
-              
-              <!-- Stats cards -->
+              <p class="profile-role">{{ T.about.role?.[lang] || 'Full Stack Developer' }}</p>
+
               <div class="stats-grid">
                 <div class="stat-card">
                   <div class="stat-icon">
@@ -96,29 +90,55 @@
                   </div>
                   <div class="stat-content">
                     <div class="stat-value">2+</div>
-                    <div class="stat-label">{{ T.about.years?.[lang] || "Years" }}</div>
+                    <div class="stat-label">{{ T.about.years?.[lang] || 'Years' }}</div>
                   </div>
                 </div>
-                
+
                 <div class="stat-card">
                   <div class="stat-icon">
                     <Icon name="mdi:check-circle" class="w-5 h-5" />
                   </div>
                   <div class="stat-content">
                     <div class="stat-value">{{ displayProjectCount }}+</div>
-                    <div class="stat-label">{{ T.about.projects_label?.[lang] || "Projects" }}</div>
+                    <div class="stat-label">{{ T.about.projects_label?.[lang] || 'Projects' }}</div>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <!-- Enhanced social links -->
+
+            <div class="education-section mt-8 pt-8 border-t border-slate-700/50 text-left">
+              <h4 class="social-title !text-left !mb-5">{{ T.about.education?.[lang] || (lang === 'en' ? 'Education' : 'Pendidikan') }}</h4>
+              
+              <div class="space-y-4">
+                <div v-for="edu in educations" :key="edu.id" class="relative pl-5 border-l-2 border-slate-700 hover:border-blue-500 transition-colors duration-300">
+                  <div class="absolute w-2.5 h-2.5 bg-blue-500 rounded-full -left-[5px] top-1.5 shadow-[0_0_10px_#3b82f6]"></div>
+                  
+                  <h5 class="text-white font-bold text-[14px] leading-tight">
+                    {{ edu.degree?.[lang] }} <span class="text-gray-400 font-normal">in</span> {{ edu.major?.[lang] }}
+                  </h5>
+                  <p class="text-blue-400 text-[13px] font-medium mt-1">{{ edu.institution }}</p>
+                  <p class="text-gray-500 text-[12px] mt-0.5 flex items-center gap-1">
+                    <Icon name="mdi:calendar-blank" class="w-3 h-3" />
+                    {{ edu.period }}
+                  </p>
+                  <p v-if="edu.gpa" class="text-yellow-500/90 font-bold text-[12px] flex items-center gap-1 bg-yellow-500/10 px-2 py-0.5 rounded-md border border-yellow-500/20">
+                      <Icon name="mdi:star-shooting-outline" class="w-3.5 h-3.5" />
+                      GPA: {{ edu.gpa }}
+                  </p>
+                </div>
+                
+                <div v-if="!educations || educations.length === 0" class="text-slate-500 text-xs italic">
+                  Belum ada data pendidikan.
+                </div>
+              </div>
+            </div>  
+
             <div class="social-section">
-              <h4 class="social-title">{{ T.about.connect?.[lang] || "Connect With Me" }}</h4>
+              <h4 class="social-title">{{ T.about.connect?.[lang] || 'Connect With Me' }}</h4>
               <div class="social-grid">
-                <a 
-                  href="https://www.linkedin.com/in/vincent-axel-20b7b1235/" 
-                  target="_blank" 
+                <a
+                  href="https://www.linkedin.com/in/vincent-axel-20b7b1235/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   class="social-btn linkedin"
                   aria-label="LinkedIn Profile"
@@ -128,10 +148,10 @@
                   <span class="social-label">LinkedIn</span>
                   <div class="btn-shine"></div>
                 </a>
-                
-                <a 
-                  href="https://github.com/rank1unlock" 
-                  target="_blank" 
+
+                <a
+                  href="https://github.com/rank1unlock"
+                  target="_blank"
                   rel="noopener noreferrer"
                   class="social-btn github"
                   aria-label="GitHub Profile"
@@ -141,10 +161,10 @@
                   <span class="social-label">GitHub</span>
                   <div class="btn-shine"></div>
                 </a>
-                
-                <a 
-                  href="https://www.instagram.com/just_vincent_gs/?next=%2F" 
-                  target="_blank" 
+
+                <a
+                  href="https://www.instagram.com/just_vincent_gs/?next=%2F"
+                  target="_blank"
                   rel="noopener noreferrer"
                   class="social-btn instagram"
                   aria-label="Instagram Profile"
@@ -154,10 +174,10 @@
                   <span class="social-label">Instagram</span>
                   <div class="btn-shine"></div>
                 </a>
-                
-                <a 
-                  href="https://wa.me/6281252850845" 
-                  target="_blank" 
+
+                <a
+                  href="https://wa.me/6281252850845"
+                  target="_blank"
                   rel="noopener noreferrer"
                   class="social-btn whatsapp"
                   aria-label="WhatsApp Contact"
@@ -172,102 +192,116 @@
           </div>
         </div>
 
-        <!-- Right Column - Content -->
         <div class="content-column lg:col-span-2">
-          <!-- About description -->
           <div class="content-section description-section" :class="targetIsVisible ? 'active' : ''">
             <div class="section-icon">
               <Icon name="mdi:account-details" class="w-8 h-8" />
             </div>
-            <h3 class="content-title">{{ T.about.about_me?.[lang] || "About Me" }}</h3>
+            <h3 class="content-title">{{ T.about.about_me?.[lang] || 'About Me' }}</h3>
             <p class="content-text">
               {{ T.about.description[lang] }}
             </p>
           </div>
 
-
-          <!-- Experience section -->
           <div class="content-section experience-section" :class="targetIsVisible ? 'active' : ''">
             <div class="section-icon">
               <Icon name="mdi:briefcase" class="w-8 h-8" />
             </div>
-            <h3 class="content-title">{{ T.about.experience[lang] }}</h3>
-            
+            <h3 class="content-title">
+              {{ T.about.short_experience?.[lang] || 'Pengalaman Singkat' }}
+            </h3>
+
             <div class="experience-timeline">
-              <!-- Experience item 1 -->
-              <div class="timeline-item">
+              <div v-for="exp in experiences" :key="exp.id" class="timeline-item">
                 <div class="timeline-marker">
                   <div class="marker-dot"></div>
                   <div class="marker-pulse"></div>
                 </div>
-                
+
                 <div class="timeline-content">
-                  <div class="timeline-card">
-                    <div class="card-header">
-                      <div class="company-logo">
+                  <div
+                    class="timeline-card cursor-pointer group"
+                    :class="{ expanded: expandedExpId === exp.id }"
+                    @click="toggleExp(exp.id)"
+                  >
+                    <div class="card-header flex items-start gap-4 !mb-0 relative z-10">
+                      <div class="company-logo items-center justify-center flex-shrink-0">
                         <Icon name="mdi:office-building" class="w-6 h-6" />
                       </div>
-                      <div class="header-info">
-                        <h4 class="job-title">{{ T.about.job1_title[lang] }}</h4>
-                        <p class="company-name">{{ T.about.job1_place[lang] }}</p>
+                      <div class="header-info flex-1">
+                        <h4 class="job-title text-xl font-bold">{{ exp.title[lang] }}</h4>
+                        <p class="company-name text-blue-400">{{ exp.company[lang] }}</p>
+
+                        <div class="job-badge w-fit hidden md:flex mt-3">
+                          {{ exp.period[lang] }}
+                        </div>
                       </div>
-                      <div class="job-badge">
-                        {{ T.about.job1_period?.[lang] || "Current" }}
+
+                      <div class="expand-arrow flex items-center gap-3">
+                        <div
+                          class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center transition-transform duration-300"
+                          :class="{ 'rotate-180': expandedExpId === exp.id }"
+                        >
+                          <Icon name="mdi:chevron-down" class="w-5 h-5 text-gray-400" />
+                        </div>
                       </div>
                     </div>
-                    
-                    <p class="job-description">{{ T.about.job1_desc[lang] }}</p>
-                    
-                    <div class="job-highlights">
-                      <span class="highlight-badge" v-for="(tag, i) in job1Tags" :key="i">
-                        {{ tag }}
-                      </span>
+
+                    <div
+                      class="grid transition-all duration-300 ease-in-out"
+                      :class="
+                        expandedExpId === exp.id
+                          ? 'grid-rows-[1fr] opacity-100 mt-6 pt-6 border-t border-slate-700/50'
+                          : 'grid-rows-[0fr] opacity-0 mt-0 pt-0 border-transparent'
+                      "
+                    >
+                      <div class="overflow-hidden relative z-10">
+                        <div class="job-badge md:hidden w-fit mb-4">
+                          {{ exp.period[lang] }}
+                        </div>
+
+                        <div v-if="exp.points && exp.points.length > 0" class="description-grid grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 mt-6">
+                          <div v-for="(point, i) in exp.points" :key="`pt-${i}`" class="point-item">
+                            <h5 class="text-white font-bold text-[15px] md:text-[16px] block mb-2 leading-tight">
+                              {{ point?.title?.[lang] || '' }}
+                            </h5>
+                            <p class="text-gray-400 text-[14px] md:text-[15px] leading-relaxed block">
+                              {{ point?.desc?.[lang] || '' }}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          v-else-if="exp.description && (exp.description.id || exp.description.en)"
+                          class="text-gray-400 text-[14px] leading-relaxed"
+                        >
+                          {{ exp.description[lang] || exp.description.id }}
+                        </div>
+
+                        <div
+                          v-if="exp.tags && exp.tags.length > 0"
+                          class="job-highlights flex flex-wrap gap-2 mt-6"
+                        >
+                          <span class="highlight-badge" v-for="(tag, i) in exp.tags" :key="i">
+                            {{ tag }}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    
-                    <div class="card-decoration">
+
+                    <div class="card-decoration z-0">
                       <div class="deco-corner corner-tl"></div>
                       <div class="deco-corner corner-br"></div>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              <!-- Experience item 2 -->
-              <div class="timeline-item">
-                <div class="timeline-marker">
-                  <div class="marker-dot"></div>
-                  <div class="marker-pulse"></div>
-                </div>
-                
-                <div class="timeline-content">
-                  <div class="timeline-card">
-                    <div class="card-header">
-                      <div class="company-logo">
-                        <Icon name="mdi:office-building" class="w-6 h-6" />
-                      </div>
-                      <div class="header-info">
-                        <h4 class="job-title">{{ T.about.job2_title[lang] }}</h4>
-                        <p class="company-name">{{ T.about.job2_place[lang] }}</p>
-                      </div>
-                      <div class="job-badge">
-                        {{ T.about.job2_period?.[lang] || "2022-2023" }}
-                      </div>
-                    </div>
-                    
-                    <p class="job-description">{{ T.about.job2_desc[lang] }}</p>
-                    
-                    <div class="job-highlights">
-                      <span class="highlight-badge" v-for="(tag, i) in job2Tags" :key="i">
-                        {{ tag }}
-                      </span>
-                    </div>
-                    
-                    <div class="card-decoration">
-                      <div class="deco-corner corner-tl"></div>
-                      <div class="deco-corner corner-br"></div>
-                    </div>
-                  </div>
-                </div>
+
+              <div
+                v-if="!experiences || experiences.length === 0"
+                class="text-slate-500 italic text-sm py-4"
+              >
+                Belum ada pengalaman kerja yang ditambahkan.
               </div>
             </div>
           </div>
@@ -278,86 +312,87 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useIntersectionObserver, useTransition, TransitionPresets } from '@vueuse/core';
-import { useLang } from '~/composables/useLang';
-import { translations } from '~/data/translations';
+import { ref, computed } from 'vue'
+import { useIntersectionObserver, useTransition, TransitionPresets } from '@vueuse/core'
+import { useLang } from '~/composables/useLang'
+import { translations } from '~/data/translations'
 
-const { lang } = useLang();
-const T = translations;
+const { lang } = useLang()
+const T = translations
 
-const target = ref(null);
-const targetIsVisible = ref(false);
+const target = ref(null)
+const targetIsVisible = ref(false)
 
-// --- LOGIKA COUNTER ANIMASI PROYEK ---
-const rawProjectCount = ref(0);
-const hasAnimated = ref(false);
+const { data: experiences } = await useFetch('/api/experiences')
+const { data: educations } = await useFetch('/api/educations');
 
-// Transisi halus menggunakan EaseOutExpo (cepat di awal, lambat di akhir)
+const rawProjectCount = ref(0)
+const hasAnimated = ref(false)
+
 const animatedProjectCount = useTransition(rawProjectCount, {
-  duration: 2500, // Durasi animasi 2.5 detik
-  transition: TransitionPresets.easeOutExpo,
-});
+  duration: 2500,
+  transition: TransitionPresets.easeOutExpo
+})
 
 // Membulatkan angka agar tidak muncul desimal saat animasi berjalan
-const displayProjectCount = computed(() => Math.round(animatedProjectCount.value));
+const displayProjectCount = computed(() => Math.round(animatedProjectCount.value))
 
 // Fungsi mengambil jumlah data dari Supabase
 const fetchProjectCount = async () => {
   try {
-    const client = useSupabaseClient();
+    const client = useSupabaseClient()
     // Menggunakan { count: 'exact', head: true } agar sangat ringan (hanya hitung baris)
     const { count, error } = await client
       .from('projects')
-      .select('*', { count: 'exact', head: true });
+      .select('*', { count: 'exact', head: true })
 
-    if (!error && count !== null) return count;
-    return 5; // Fallback jika gagal
+    if (!error && count !== null) return count
+    return 5 // Fallback jika gagal
   } catch (err) {
-    return 5; // Fallback jika error
+    return 5 // Fallback jika error
   }
-};
+}
+
+// --- LOGIKA ACCORDION (BUKA/TUTUP PENGALAMAN) ---
+// State untuk melacak ID pengalaman mana yang sedang dibuka (Expanded)
+const expandedExpId = ref(null)
+
+// Fungsi untuk membuka/menutup kotak pengalaman
+const toggleExp = (id) => {
+  if (expandedExpId.value === id) {
+    expandedExpId.value = null // Tutup jika diklik lagi (Accordion collapse)
+  } else {
+    expandedExpId.value = id // Buka kotak yang diklik (Accordion expand)
+  }
+}
 
 // --- INTERSECTION OBSERVER ---
 useIntersectionObserver(
   target,
   async ([{ isIntersecting }]) => {
     if (isIntersecting) {
-      targetIsVisible.value = true;
-      
-      // Jalankan animasi angka hanya sekali saat section terlihat
+      targetIsVisible.value = true
+
+      // Jalankan animasi angka proyek hanya sekali saat section terlihat
       if (!hasAnimated.value) {
-        const finalCount = await fetchProjectCount();
-        rawProjectCount.value = finalCount;
-        hasAnimated.value = true;
+        const finalCount = await fetchProjectCount()
+        rawProjectCount.value = finalCount
+        hasAnimated.value = true
       }
     }
   },
   { threshold: 0.1 }
-);
+)
 
-// --- DATA STATIS LAINNYA ---
-const skills = [
-  { name: 'HTML5', icon: 'mdi:language-html5', level: 95, color: '#e34c26' },
-  { name: 'CSS3', icon: 'mdi:language-css3', level: 90, color: '#264de4' },
-  { name: 'JavaScript', icon: 'mdi:language-javascript', level: 92, color: '#f0db4f' },
-  { name: 'Vue.js/Nuxt.js', icon: 'mdi:vuejs', level: 88, color: '#42b883' },
-  { name: 'PHP', icon: 'mdi:language-php', level: 85, color: '#8892be' },
-  { name: 'Java', icon: 'mdi:language-java', level: 80, color: '#f89820' },
-  { name: 'Node.js', icon: 'mdi:nodejs', level: 87, color: '#68a063' },
-  { name: 'SQL & Database', icon: 'mdi:database', level: 90, color: '#00758f' }
-];
-
-const job1Tags = ['Full Stack', 'Vue.js', 'API Development', 'Database Design'];
-const job2Tags = ['Web Development', 'PHP', 'Team Collaboration', 'Problem Solving'];
+// (Dihapus: Skills, job1Tags statis yang lama karena sudah dinamis)
 
 const getParticleStyle = (index) => {
-  const delay = Math.random() * 10;
-  const duration = 20 + Math.random() * 15;
-  const size = 2 + Math.random() * 4;
-  const startX = Math.random() * 100;
-  const hue = 200 + Math.random() * 80;
-  
+  const delay = Math.random() * 10
+  const duration = 20 + Math.random() * 15
+  const size = 2 + Math.random() * 4
+  const startX = Math.random() * 100
+  const hue = 200 + Math.random() * 80
+
   return {
     left: startX + '%',
     animationDelay: delay + 's',
@@ -366,8 +401,8 @@ const getParticleStyle = (index) => {
     height: size + 'px',
     background: `hsl(${hue}, 70%, 60%)`,
     boxShadow: `0 0 ${size * 3}px hsl(${hue}, 70%, 60%)`
-  };
-};
+  }
+}
 </script>
 
 <style scoped>
@@ -438,7 +473,8 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes float-orb {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -523,15 +559,19 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes pattern-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Dynamic grid */
 .dynamic-grid {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
   background-size: 100px 100px;
@@ -539,8 +579,12 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes grid-flow {
-  from { background-position: 0 0; }
-  to { background-position: 100px 100px; }
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100px 100px;
+  }
 }
 
 /* Light beams */
@@ -580,7 +624,9 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes beam-sweep {
-  to { transform: translateX(calc(100vw + 400px)); }
+  to {
+    transform: translateX(calc(100vw + 400px));
+  }
 }
 
 /* Section header */
@@ -636,7 +682,8 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes badge-pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
   }
   50% {
@@ -662,8 +709,13 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes gradient-flow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .section-subtitle {
@@ -751,8 +803,12 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes ring-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .image-glow {
@@ -764,7 +820,8 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes glow-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(0.9);
   }
@@ -818,8 +875,13 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes status-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
 
 .status-text {
@@ -1060,12 +1122,8 @@ const getParticleStyle = (index) => {
   transition-delay: 0.2s;
 }
 
-.skills-section.active {
-  transition-delay: 0.4s;
-}
-
 .experience-section.active {
-  transition-delay: 0.6s;
+  transition-delay: 0.4s;
 }
 
 .section-icon {
@@ -1082,8 +1140,13 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes icon-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .content-title {
@@ -1108,8 +1171,12 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes title-line-extend {
-  from { width: 0; }
-  to { width: 50%; }
+  from {
+    width: 0;
+  }
+  to {
+    width: 50%;
+  }
 }
 
 .content-text {
@@ -1129,132 +1196,6 @@ const getParticleStyle = (index) => {
   height: 100%;
   background: linear-gradient(180deg, #3b82f6, #8b5cf6);
   border-radius: 2px;
-}
-
-/* Skills showcase */
-.skills-showcase {
-  display: grid;
-  gap: 1rem;
-}
-
-.skill-item {
-  position: relative;
-  background: rgba(55, 65, 81, 0.5);
-  border: 1px solid rgba(75, 85, 99, 0.3);
-  border-radius: 12px;
-  padding: 1.25rem;
-  opacity: 0;
-  transform: translateX(-30px);
-  animation: skill-slide-in 0.6s ease forwards;
-  transition: all 0.3s ease;
-  overflow: hidden;
-}
-
-@keyframes skill-slide-in {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.skill-item:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.5);
-  transform: translateX(5px);
-  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
-}
-
-.skill-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.skill-icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.skill-item:hover .skill-icon-wrapper {
-  transform: rotate(10deg) scale(1.1);
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-}
-
-.skill-icon-svg {
-  width: 20px;
-  height: 20px;
-  color: #60a5fa;
-  transition: color 0.3s ease;
-}
-
-.skill-item:hover .skill-icon-svg {
-  color: white;
-}
-
-.skill-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #e5e7eb;
-}
-
-.skill-bar {
-  position: relative;
-  height: 8px;
-  background: rgba(55, 65, 81, 0.8);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.skill-progress {
-  position: relative;
-  height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #a78bfa);
-  border-radius: 4px;
-  transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  animation: progress-glow 2s ease-in-out infinite;
-}
-
-@keyframes progress-glow {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
-  }
-}
-
-.progress-shine {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: shine-move 2s ease-in-out infinite;
-}
-
-@keyframes shine-move {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.skill-glow-effect {
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-  border-radius: 12px;
-  opacity: 0;
-  filter: blur(10px);
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.skill-item:hover .skill-glow-effect {
-  opacity: 0.3;
 }
 
 /* Experience timeline */
@@ -1300,7 +1241,8 @@ const getParticleStyle = (index) => {
 }
 
 @keyframes marker-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
   }
@@ -1335,7 +1277,7 @@ const getParticleStyle = (index) => {
   border: 1px solid rgba(75, 85, 99, 0.3);
   border-radius: 16px;
   padding: 1.5rem;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
@@ -1352,18 +1294,15 @@ const getParticleStyle = (index) => {
   opacity: 1;
 }
 
-.timeline-card:hover {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.5);
-  transform: translateX(10px);
-  box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+/* INTERAKTIF (Accordion Expanded) */
+.timeline-card.expanded {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(59, 130, 246, 0.8);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  transform: scale(1.02);
 }
 
 .card-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
   position: relative;
   z-index: 2;
 }
@@ -1385,20 +1324,18 @@ const getParticleStyle = (index) => {
 }
 
 .job-title {
-  font-size: 1.25rem;
-  font-weight: 700;
   color: #fff;
   margin-bottom: 0.25rem;
   transition: color 0.3s ease;
 }
 
-.timeline-card:hover .job-title {
+.timeline-card:hover .job-title,
+.timeline-card.expanded .job-title {
   color: #60a5fa;
 }
 
 .company-name {
   font-size: 0.875rem;
-  color: #60a5fa;
   font-weight: 500;
 }
 
@@ -1415,19 +1352,30 @@ const getParticleStyle = (index) => {
   white-space: nowrap;
 }
 
-.job-description {
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: #d1d5db;
-  margin-bottom: 1rem;
+/* Poin-poin Deskripsi */
+.description-grid {
+  will-change: max-height, opacity;
   position: relative;
   z-index: 2;
+}
+
+.job-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.point-item {
+  position: relative;
+}
+
+.point-item span {
+  flex: 1;
 }
 
 .job-highlights {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
   position: relative;
   z-index: 2;
 }
@@ -1481,9 +1429,10 @@ const getParticleStyle = (index) => {
   border-bottom-right-radius: 8px;
 }
 
-.timeline-card:hover .deco-corner {
+.timeline-card:hover .deco-corner,
+.timeline-card.expanded .deco-corner {
   border-color: rgba(59, 130, 246, 0.8);
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
 /* Responsive Design */
@@ -1491,7 +1440,7 @@ const getParticleStyle = (index) => {
   .content-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .profile-column {
     max-width: 500px;
     margin: 0 auto;
@@ -1502,43 +1451,61 @@ const getParticleStyle = (index) => {
   .section-title {
     font-size: 2.5rem;
   }
-  
+
   .profile-card {
     padding: 1.5rem;
   }
-  
+
   .profile-image-wrapper {
     width: 160px;
     height: 160px;
   }
-  
+
   .social-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .content-section {
     padding: 1.5rem;
   }
-  
+
   .content-title {
     font-size: 1.5rem;
   }
-  
+
   .experience-timeline {
     padding-left: 1.5rem;
   }
-  
+
   .timeline-marker {
     left: -2rem;
   }
-  
+
+  .timeline-card {
+    padding: 1.25rem;
+  }
+
   .card-header {
     flex-wrap: wrap;
+    gap: 0.75rem !important; /* Force gap fix for mobile */
   }
-  
+
   .job-badge {
-    width: 100%;
     justify-content: center;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .job-title {
+    font-size: 1.1rem;
+  }
+
+  .description-grid {
+    gap: 1.5rem;
+  }
+
+  .job-points-list {
+    font-size: 14px;
   }
 }
 
@@ -1546,107 +1513,70 @@ const getParticleStyle = (index) => {
   .section-title {
     font-size: 2rem;
   }
-  
+
   .header-badge {
     width: 40px;
     height: 40px;
   }
-  
+
   .deco-line {
     width: 40px;
   }
-  
+
   .profile-image-wrapper {
     width: 140px;
     height: 140px;
   }
-  
+
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .content-text {
     padding-left: 1rem;
   }
-  
-  .skills-showcase {
-    gap: 0.75rem;
-  }
-  
-  .skill-item {
-    padding: 1rem;
-  }
-  
+
   .timeline-card {
     padding: 1rem;
   }
-  
+
   .gradient-orb {
     opacity: 0.08;
   }
-  
+
   .particles-container .particle {
     display: none;
   }
 }
 
-/* Accessibility */
+/* Accessibility & Performance */
 @media (prefers-reduced-motion: reduce) {
   *,
-  *::before,
-  *::after {
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
   .gradient-orb,
   .particles-container,
   .light-beams,
   .geometric-patterns {
     display: none;
   }
-  
   .deco-ring {
     animation: none;
   }
 }
 
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .profile-card,
-  .content-section,
-  .timeline-card {
-    border-width: 2px;
-    border-color: rgba(59, 130, 246, 0.6);
-  }
-  
-  .skill-item {
-    border-width: 2px;
-  }
-  
-  .section-title {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  }
-}
-
-/* Focus states */
-.social-btn:focus-visible,
-.skill-item:focus-within,
-.timeline-card:focus-within {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
-}
-
-/* Performance optimization */
 .gradient-orb,
 .particle,
 .profile-image,
 .social-btn,
-.skill-item,
-.timeline-card {
+.timeline-card,
+.deco-corner,
+.skill-progress {
   will-change: transform, opacity;
-  backface-visibility: hidden;
   transform: translateZ(0);
 }
 </style>

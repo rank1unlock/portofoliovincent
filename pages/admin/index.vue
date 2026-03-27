@@ -664,6 +664,339 @@
       </div>
 
       <div class="mb-20">
+        <h2 class="text-2xl font-bold mb-6 text-yellow-400 border-b border-slate-700 pb-2">
+          Manajemen Pengalaman Kerja
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2">
+            <form
+              @submit.prevent="saveExperience"
+              class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl backdrop-blur-sm space-y-6"
+            >
+              <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Icon name="mdi:briefcase" class="text-yellow-400" />
+                {{ isEditingExp ? 'Edit Pengalaman' : 'Tambah Pengalaman Baru' }}
+              </h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500"
+                    >Posisi / Jabatan (ID & EN)</label
+                  >
+                  <input
+                    v-model="expForm.title.id"
+                    @input="expForm.title.en = expForm.title.id"
+                    class="admin-input w-full"
+                    placeholder="Contoh: Full Stack Developer"
+                    required
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500"
+                    >Nama Perusahaan (ID & EN)</label
+                  >
+                  <input
+                    v-model="expForm.company.id"
+                    @input="expForm.company.en = expForm.company.id"
+                    class="admin-input w-full"
+                    placeholder="Contoh: PT. Teknologi Asia"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Periode (ID)</label>
+                  <input
+                    v-model="expForm.period.id"
+                    class="admin-input w-full"
+                    placeholder="Contoh: Jan 2024 - Sekarang"
+                    required
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Periode (EN)</label>
+                  <input
+                    v-model="expForm.period.en"
+                    class="admin-input w-full"
+                    placeholder="Ex: Jan 2024 - Present"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="pt-6 border-t border-slate-700/50 space-y-4">
+                <h4 class="text-sm font-bold uppercase text-gray-300">Detail Pekerjaan (5 Slot)</h4>
+                <p class="text-[10px] text-slate-500 -mt-2">Format: Judul Poin (ex: Customer Service) & Deskripsi Penjelasannya.</p>
+                
+                <div v-for="(point, idx) in expPointsInput" :key="idx" class="bg-slate-800/40 p-4 rounded-xl border border-slate-700 space-y-3">
+                  <h5 class="text-[10px] font-bold text-yellow-400">SLOT {{ idx + 1 }}</h5>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input v-model="point.titleId" @input="point.titleEn = point.titleId" class="admin-input text-xs font-bold text-white placeholder-slate-500" placeholder="Judul ID (Contoh: Customer Service)" />
+                    <input v-model="point.titleEn" class="admin-input text-xs font-bold text-white placeholder-slate-500" placeholder="Judul EN (Contoh: Customer Service)" />
+                  </div>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <textarea v-model="point.descId" class="admin-input text-xs h-16" placeholder="Deskripsi ID..."></textarea>
+                    <textarea v-model="point.descEn" class="admin-input text-xs h-16" placeholder="Description EN..."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-xs font-bold uppercase text-slate-500"
+                  >Keahlian / Tags (Pisahkan dengan koma)</label
+                >
+                <input
+                  v-model="expTagsInput"
+                  class="admin-input w-full"
+                  placeholder="Vue.js, API Development, Database"
+                  required
+                />
+              </div>
+
+              <div class="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  class="flex-1 bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-yellow-900/20"
+                  :disabled="isUploadingExp"
+                >
+                  {{ isEditingExp ? 'Update Pengalaman' : 'Simpan Pengalaman' }}
+                </button>
+                <button
+                  v-if="isEditingExp"
+                  @click="resetExpForm"
+                  type="button"
+                  class="px-6 bg-slate-700 hover:bg-slate-600 rounded-xl transition"
+                >
+                  Batal
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold flex items-center gap-2">
+              <Icon name="mdi:format-list-bulleted" class="text-yellow-400" />
+              Daftar Pengalaman ({{ experiences?.length || 0 }})
+            </h3>
+            <div class="max-h-[500px] overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+              <div
+                v-for="exp in experiences"
+                :key="exp.id"
+                class="group bg-slate-800/30 border border-slate-700 p-4 rounded-xl flex justify-between items-center hover:border-slate-500 transition"
+              >
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div
+                    class="w-10 h-10 bg-slate-700 rounded flex-shrink-0 flex items-center justify-center"
+                  >
+                    <Icon name="mdi:domain" class="text-yellow-400 text-xl" />
+                  </div>
+                  <div class="truncate">
+                    <h3 class="font-medium text-sm truncate">
+                      {{ exp.title?.id || 'Tanpa Judul' }}
+                    </h3>
+                    <p class="text-[10px] text-slate-500 truncate mt-1">{{ exp.company?.id }}</p>
+                  </div>
+                </div>
+                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition flex-shrink-0">
+                  <button
+                    @click="editExperience(exp)"
+                    class="p-2 hover:bg-yellow-500/20 text-yellow-400 rounded-md transition"
+                  >
+                    <Icon name="mdi:pencil" />
+                  </button>
+                  <button
+                    @click="deleteExperience(exp.id)"
+                    class="p-2 hover:bg-red-500/20 text-red-400 rounded-md transition"
+                  >
+                    <Icon name="mdi:trash-can" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-20">
+        <h2 class="text-2xl font-bold mb-6 text-yellow-400 border-b border-slate-700 pb-2">
+          Manajemen Pendidikan (Education)
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2">
+            <form @submit.prevent="saveEducation" class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl backdrop-blur-sm space-y-6">
+              <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Icon name="mdi:school" class="text-yellow-400" />
+                {{ isEditingEdu ? 'Edit Pendidikan' : 'Tambah Pendidikan Baru' }}
+              </h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Gelar (ID)</label>
+                  <input v-model="eduForm.degree.id" class="admin-input w-full" placeholder="Contoh: S1" required />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Gelar (EN)</label>
+                  <input v-model="eduForm.degree.en" class="admin-input w-full" placeholder="Contoh: Bachelor's Degree" required />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Jurusan (ID)</label>
+                  <input v-model="eduForm.major.id" class="admin-input w-full" placeholder="Contoh: Teknik Informatika" required />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Jurusan (EN)</label>
+                  <input v-model="eduForm.major.en" class="admin-input w-full" placeholder="Contoh: Computer Science" required />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Institusi / Universitas</label>
+                  <input v-model="eduForm.institution" class="admin-input w-full" placeholder="Contoh: Institut Teknologi Asia..." required />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Tahun / Periode</label>
+                  <input v-model="eduForm.period" class="admin-input w-full" placeholder="Contoh: 2024 - Sekarang" required />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-yellow-500">IPK / GPA </label>
+                  <input v-model="eduForm.gpa" class="admin-input w-full border-yellow-500/30 focus:border-yellow-400" placeholder="Contoh: 3.85 / 4.00" />
+                </div>
+              </div>
+
+              <div class="flex gap-3 pt-4">
+                <button type="submit" class="flex-1 bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-yellow-900/20">
+                  {{ isEditingEdu ? 'Update Pendidikan' : 'Simpan Pendidikan' }}
+                </button>
+                <button v-if="isEditingEdu" @click="resetEduForm" type="button" class="px-6 bg-slate-700 hover:bg-slate-600 rounded-xl transition">Batal</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold flex items-center gap-2">
+              <Icon name="mdi:format-list-bulleted" class="text-yellow-400" />
+              Daftar Pendidikan ({{ educations?.length || 0 }})
+            </h3>
+            <div class="max-h-[500px] overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+              <div v-for="edu in educations" :key="edu.id" class="group bg-slate-800/30 border border-slate-700 p-4 rounded-xl flex justify-between items-center hover:border-slate-500 transition">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div class="w-10 h-10 bg-slate-700 rounded flex-shrink-0 flex items-center justify-center">
+                    <Icon name="mdi:school-outline" class="text-yellow-400 text-xl" />
+                  </div>
+                  <div class="truncate">
+                    <h3 class="font-medium text-sm truncate">{{ edu.degree?.id }} - {{ edu.major?.id }}</h3>
+                    <p class="text-[10px] text-slate-500 truncate mt-1">{{ edu.institution }}</p>
+                  </div>
+                </div>
+                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition flex-shrink-0">
+                  <button @click="editEducation(edu)" class="p-2 hover:bg-yellow-500/20 text-yellow-400 rounded-md transition"><Icon name="mdi:pencil" /></button>
+                  <button @click="deleteEducation(edu.id)" class="p-2 hover:bg-red-500/20 text-red-400 rounded-md transition"><Icon name="mdi:trash-can" /></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-20">
+        <h2 class="text-2xl font-bold mb-6 text-yellow-400 border-b border-slate-700 pb-2">
+          Manajemen Galeri Kenangan
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2">
+            <form @submit.prevent="saveGalleryItem" class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl backdrop-blur-sm space-y-6">
+              <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Icon name="mdi:image-multiple" class="text-yellow-400" />
+                {{ isEditingGallery ? 'Edit Item Galeri' : 'Tambah Kenangan Baru' }}
+              </h3>
+
+              <div class="space-y-3">
+                <label class="text-xs font-bold uppercase text-slate-500">Foto Kenangan</label>
+                <div class="flex items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-700">
+                  <div class="w-24 h-24 bg-slate-700 rounded-xl overflow-hidden flex items-center justify-center relative">
+                    <img v-if="galleryForm.imageUrl" :src="galleryForm.imageUrl" class="w-full h-full object-cover" />
+                    <Icon v-else name="mdi:image-outline" class="text-slate-500 text-3xl" />
+                    <div v-if="isUploadingGallery" class="absolute inset-0 bg-slate-900/80 flex items-center justify-center">
+                      <div class="w-5 h-5 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  </div>
+                  <div class="flex-1 space-y-2">
+                    <input type="file" @change="handleGalleryUpload" accept="image/*" class="text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-yellow-600/20 file:text-yellow-400 hover:file:bg-yellow-600/40" />
+                    <p class="text-[10px] text-slate-500">Maksimal 2MB. Format JPG, PNG, WEBP.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Deskripsi (ID)</label>
+                  <input v-model="galleryForm.description.id" class="admin-input w-full" placeholder="Ex: Kunjungan Tech Expo" required />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-slate-500">Deskripsi (EN)</label>
+                  <input v-model="galleryForm.description.en" class="admin-input w-full" placeholder="Ex: Tech Expo Visit" required />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-xs font-bold uppercase text-slate-500">Tahun Foto Diambil</label>
+                <input v-model="galleryForm.year" class="admin-input w-full" placeholder="Ex: 2024" required />
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-700/50">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-yellow-500">Poin Aktivitas (ID, Pisahkan dengan koma)</label>
+                  <textarea v-model="galleryPointsIdInput" class="admin-input w-full h-20 text-xs" placeholder="Poin 1, Poin 2..." required></textarea>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold uppercase text-yellow-500">Activity Points (EN, Separate with comma)</label>
+                  <textarea v-model="galleryPointsEnInput" class="admin-input w-full h-20 text-xs" placeholder="Point 1, Point 2..." required></textarea>
+                </div>
+              </div>
+
+              <div class="flex gap-3 pt-4">
+                <button type="submit" class="flex-1 bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-yellow-900/20" :disabled="isUploadingGallery">
+                  {{ isEditingGallery ? 'Update Kenangan' : 'Simpan Kenangan' }}
+                </button>
+                <button v-if="isEditingGallery" @click="resetGalleryForm" type="button" class="px-6 bg-slate-700 hover:bg-slate-600 rounded-xl transition">Batal</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold flex items-center gap-2">
+              <Icon name="mdi:format-list-bulleted" class="text-yellow-400" />
+              Daftar Kenangan ({{ galleryItems?.length || 0 }})
+            </h3>
+            <div class="max-h-[500px] overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+              <div v-for="item in galleryItems" :key="item.id" class="group bg-slate-800/30 border border-slate-700 p-3 rounded-xl flex justify-between items-center hover:border-slate-500 transition">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div class="w-12 h-12 bg-slate-700 rounded-lg overflow-hidden flex-shrink-0">
+                    <img :src="item.imageUrl" class="w-full h-full object-cover" />
+                  </div>
+                  <div class="truncate">
+                    <h3 class="font-medium text-sm truncate">{{ item.description?.id }}</h3>
+                    <p class="text-[10px] text-slate-500 truncate mt-1">Tahun {{ item.year }}</p>
+                  </div>
+                </div>
+                <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition flex-shrink-0">
+                  <button @click="editGalleryItem(item)" class="p-2 hover:bg-yellow-500/20 text-yellow-400 rounded-md transition"><Icon name="mdi:pencil" /></button>
+                  <button @click="deleteGalleryItem(item.id)" class="p-2 hover:bg-red-500/20 text-red-400 rounded-md transition"><Icon name="mdi:trash-can" /></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-20">
         <h2 class="text-2xl font-bold mb-6 text-rose-400 border-b border-slate-700 pb-2">
           Manajemen Video Intro
         </h2>
@@ -818,10 +1151,8 @@ const isAuthenticated = ref(false)
 const passwordInput = ref('')
 const loginError = ref('')
 
-
 const config = useRuntimeConfig()
 const SECRET_PASSWORD = config.public.adminPassword
-
 
 onMounted(() => {
   if (sessionStorage.getItem('admin_unlocked') === 'true') {
@@ -931,7 +1262,7 @@ const resetForm = () => {
     description: { id: '', en: '' },
     useIcon: true,
     mainIcon1: '',
-    iconLabel1: '', 
+    iconLabel1: '',
     backgroundIcons: ['mdi:code-tags', 'mdi:palette', 'mdi:responsive', 'mdi:star'],
     gradientFrom: 'from-blue-600',
     gradientTo: 'to-purple-600',
@@ -1177,6 +1508,107 @@ const resetTestiForm = () => {
 }
 
 // ==========================================
+// STATE GALERI FOTO (GALLERY)
+// ==========================================
+const { data: galleryItems, refresh: refreshGallery } = await useFetch('/api/gallery');
+const isEditingGallery = ref(false);
+const isUploadingGallery = ref(false);
+
+const galleryForm = ref({
+  id: null,
+  imageUrl: '', // Link foto yang diupload ke Supabase Storage
+  description: { id: '', en: '' }, // Deskripsi kenangan
+  year: '', // Tahun foto diambil
+  activityPoints: { id: [], en: [] } // Poin aktivitas di foto
+});
+
+// State sementara untuk input file dan poin teks di form
+const galleryFile = ref(null);
+const galleryPointsIdInput = ref('');
+const galleryPointsEnInput = ref('');
+
+// Fungsi Upload Foto ke Supabase Storage (Pakai API upload yang sudah kita buat sebelumnya)
+const handleGalleryUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  try {
+    isUploadingGallery.value = true;
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Tembak API upload kita
+    const { imageUrl, error } = await $fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (error) throw error;
+    galleryForm.value.imageUrl = imageUrl; // Simpan link fotonya
+  } catch (err) {
+    alert('Gagal upload foto galeri!');
+  } finally {
+    isUploadingGallery.value = false;
+  }
+};
+
+const saveGalleryItem = async () => {
+  try {
+    if (!galleryForm.value.imageUrl) return alert('Tolong upload foto dulu!');
+    
+    // Format Poin Aktivitas (Pisahkan dengan koma)
+    galleryForm.value.activityPoints.id = galleryPointsIdInput.value.split(',').map(p => p.trim()).filter(p => p !== '');
+    galleryForm.value.activityPoints.en = galleryPointsEnInput.value.split(',').map(p => p.trim()).filter(p => p !== '');
+
+    let updatedData = galleryItems.value ? [...galleryItems.value] : [];
+    const newData = { ...galleryForm.value, id: galleryForm.value.id || Date.now() };
+
+    if (isEditingGallery.value) {
+      const idx = updatedData.findIndex(g => g.id === galleryForm.value.id);
+      if (idx !== -1) updatedData[idx] = newData;
+    } else {
+      updatedData.push(newData);
+    }
+
+    // Kirim data ke API Post
+    await $fetch('/api/gallery', { method: 'POST', body: updatedData });
+    
+    alert('Item Galeri Berhasil Disimpan!');
+    resetGalleryForm();
+    await refreshGallery();
+
+  } catch (error) {
+    alert('Gagal menyimpan galeri!');
+  }
+};
+
+const editGalleryItem = (item) => {
+  isEditingGallery.value = true;
+  galleryForm.value = JSON.parse(JSON.stringify(item));
+  
+  // Format poin array kembali ke teks koma
+  galleryPointsIdInput.value = item.activityPoints.id ? item.activityPoints.id.join(', ') : '';
+  galleryPointsEnInput.value = item.activityPoints.en ? item.activityPoints.en.join(', ') : '';
+};
+
+const deleteGalleryItem = async (id) => {
+  if (!confirm('Hapus foto kenangan ini?')) return;
+  const updatedData = galleryItems.value.filter(g => g.id !== id);
+  await $fetch('/api/gallery', { method: 'POST', body: updatedData });
+  refreshGallery();
+};
+
+const resetGalleryForm = () => {
+  isEditingGallery.value = false;
+  galleryFile.value = null;
+  galleryPointsIdInput.value = '';
+  galleryPointsEnInput.value = '';
+  galleryForm.value = { 
+    id: null, imageUrl: '', description: { id: '', en: '' }, year: '', activityPoints: { id: [], en: [] } 
+  };
+};
+
+// ==========================================
 // STATE VIDEO INTRO
 // ==========================================
 const { data: videos, refresh: refreshVideos } = await useFetch('/api/videos')
@@ -1256,6 +1688,152 @@ const resetVideoForm = () => {
   isEditingVideo.value = false
   videoForm.value = { id: null, title: { id: '', en: '' }, videoUrl: '' }
 }
+
+// ==========================================
+// STATE PENGALAMAN KERJA (EXPERIENCE)
+// ==========================================
+const { data: experiences, refresh: refreshExp } = await useFetch('/api/experiences');
+const isEditingExp = ref(false);
+const isUploadingExp = ref(false);
+
+const expForm = ref({
+  id: null,
+  title: { id: '', en: '' },
+  company: { id: '', en: '' },
+  period: { id: '', en: '' },
+  points: [], // Format baru untuk menyimpan array judul + deskripsi
+  tags: []
+});
+
+const expTagsInput = ref('');
+// Bikin 5 slot kosong secara otomatis
+const expPointsInput = ref(
+  Array.from({ length: 5 }, () => ({ titleId: '', titleEn: '', descId: '', descEn: '' }))
+);
+
+const saveExperience = async () => {
+  try {
+    isUploadingExp.value = true;
+    
+    // Format Tags
+    expForm.value.tags = expTagsInput.value.split(',').map(t => t.trim()).filter(t => t !== '');
+    
+    // Format Poin (Ambil yang judul atau deskripsinya diisi saja)
+    expForm.value.points = expPointsInput.value
+      .filter(p => p.titleId !== '' || p.descId !== '')
+      .map(p => ({
+        title: { id: p.titleId, en: p.titleEn },
+        desc: { id: p.descId, en: p.descEn }
+      }));
+
+    let updatedData = experiences.value ? [...experiences.value] : [];
+    const newData = { ...expForm.value, id: expForm.value.id || Date.now() };
+
+    if (isEditingExp.value) {
+      const idx = updatedData.findIndex(e => e.id === expForm.value.id);
+      if (idx !== -1) updatedData[idx] = newData;
+    } else {
+      updatedData.push(newData);
+    }
+
+    await $fetch('/api/experiences', { method: 'POST', body: updatedData });
+    alert('Pengalaman Berhasil Disimpan!');
+    resetExpForm();
+    await refreshExp();
+
+  } catch (error) {
+    console.error('=== ERROR SIMPAN PENGALAMAN ===', error);
+    alert('Gagal menyimpan! Buka Inspect Element (F12) Console untuk melihat error.');
+  } finally {
+    isUploadingExp.value = false;
+  }
+};
+
+const editExperience = (exp) => {
+  isEditingExp.value = true;
+  expForm.value = JSON.parse(JSON.stringify(exp));
+  expTagsInput.value = exp.tags ? exp.tags.join(', ') : '';
+  
+  // Masukkan data poin lama ke dalam 5 slot form
+  const existingPoints = exp.points || [];
+  for (let i = 0; i < 5; i++) {
+    if (existingPoints[i]) {
+      expPointsInput.value[i].titleId = existingPoints[i].title?.id || '';
+      expPointsInput.value[i].titleEn = existingPoints[i].title?.en || '';
+      expPointsInput.value[i].descId = existingPoints[i].desc?.id || '';
+      expPointsInput.value[i].descEn = existingPoints[i].desc?.en || '';
+    } else {
+      expPointsInput.value[i] = { titleId: '', titleEn: '', descId: '', descEn: '' };
+    }
+  }
+};
+
+const deleteExperience = async (id) => {
+  if (!confirm('Hapus pengalaman ini?')) return;
+  const updatedData = experiences.value.filter(e => e.id !== id);
+  await $fetch('/api/experiences', { method: 'POST', body: updatedData });
+  refreshExp();
+};
+
+const resetExpForm = () => {
+  isEditingExp.value = false;
+  expTagsInput.value = '';
+  expPointsInput.value = Array.from({ length: 5 }, () => ({ titleId: '', titleEn: '', descId: '', descEn: '' }));
+  expForm.value = { id: null, title: { id: '', en: '' }, company: { id: '', en: '' }, period: { id: '', en: '' }, points: [], tags: [] };
+};
+
+// ==========================================
+// STATE PENDIDIKAN (EDUCATION)
+// ==========================================
+const { data: educations, refresh: refreshEdu } = await useFetch('/api/educations');
+const isEditingEdu = ref(false);
+
+const eduForm = ref({
+  id: null,
+  degree: { id: '', en: '' },
+  major: { id: '', en: '' },
+  institution: '', 
+  period: '',
+  gpa: ''
+});
+
+const saveEducation = async () => {
+  try {
+    let updatedData = educations.value ? [...educations.value] : [];
+    const newData = { ...eduForm.value, id: eduForm.value.id || Date.now() };
+
+    if (isEditingEdu.value) {
+      const idx = updatedData.findIndex(e => e.id === eduForm.value.id);
+      if (idx !== -1) updatedData[idx] = newData;
+    } else {
+      updatedData.push(newData);
+    }
+
+    await $fetch('/api/educations', { method: 'POST', body: updatedData });
+    alert('Pendidikan Berhasil Disimpan!');
+    resetEduForm();
+    await refreshEdu();
+  } catch (error) {
+    alert('Gagal menyimpan pendidikan!');
+  }
+};
+
+const editEducation = (edu) => {
+  isEditingEdu.value = true;
+  eduForm.value = JSON.parse(JSON.stringify(edu));
+};
+
+const deleteEducation = async (id) => {
+  if (!confirm('Hapus pendidikan ini?')) return;
+  const updatedData = educations.value.filter(e => e.id !== id);
+  await $fetch('/api/educations', { method: 'POST', body: updatedData });
+  refreshEdu();
+};
+
+const resetEduForm = () => {
+  isEditingEdu.value = false;
+  eduForm.value = { id: null, degree: { id: '', en: '' }, major: { id: '', en: '' }, institution: '', period: '', gpa: '' };
+};
 </script>
 
 <style scoped>

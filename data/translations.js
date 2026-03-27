@@ -9,7 +9,7 @@ export const translations = ref({
     gallery: { id: 'Galeri', en: 'Gallery' },
     projects: { id: 'Proyek', en: 'Projects' },
     skills: { id: 'Keahlian', en: 'Skills' },
-    video: { id: 'Video Perkenalan', en: 'Video Introduction' },
+    video: { id: 'Media', en: 'Media' },
     testimonials: { id: 'Testimoni', en: 'Testimonials' }, 
     contact: { id: 'Kontak', en: 'Contact' },
   },
