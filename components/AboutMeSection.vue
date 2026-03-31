@@ -1448,6 +1448,22 @@ const getParticleStyle = (index) => {
 }
 
 @media (max-width: 768px) {
+
+  .floating-particles,
+  .gradient-orbs,
+  .floating-cyber-elements,
+  .spotlight,
+  .interactive-spotlight,
+  .orbital-grid-pattern {
+    display: none !important;
+  }
+
+  .enhanced-video-container,
+  .content-wrapper {
+    transform: none !important;
+    transition: none !important;
+  }
+
   .section-title {
     font-size: 2.5rem;
   }

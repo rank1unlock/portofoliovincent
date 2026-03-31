@@ -323,14 +323,30 @@ const mouseY = ref(0)
 const videoTarget = ref(null)
 const parallax = useParallax(videoTarget)
 let mouseRaf = null
+let isScrolling = false;
+let scrollTimeout = null;
+
+const onScrollOptimize = () => {
+  isScrolling = true;
+  clearTimeout(scrollTimeout);
+  
+  // Jika user berhenti scroll selama 150ms, aktifkan lagi efek mouse-nya
+  scrollTimeout = setTimeout(() => {
+    isScrolling = false;
+  }, 150);
+};
 
 const handleMouseMove = (e) => {
-  if (mouseRaf) cancelAnimationFrame(mouseRaf)
+  if (isScrolling) return; 
+
+  if (window.innerWidth < 768) return;
+
+  if (mouseRaf) cancelAnimationFrame(mouseRaf);
   mouseRaf = requestAnimationFrame(() => {
-    mouseX.value = e.clientX
-    mouseY.value = e.clientY
-  })
-}
+    mouseX.value = e.clientX;
+    mouseY.value = e.clientY;
+  });
+};
 
 useIntersectionObserver(
   sectionTarget,
@@ -384,13 +400,19 @@ const onVideoPause = () => {
 }
 
 onMounted(() => {
-  window.addEventListener('mousemove', handleMouseMove)
-  fetchVideoData()
-})
+  fetchVideoData();
+
+  window.addEventListener('mousemove', handleMouseMove, { passive: true });
+  window.addEventListener('scroll', onScrollOptimize, { passive: true }); 
+});
 
 onUnmounted(() => {
-  window.removeEventListener('mousemove', handleMouseMove)
-})
+  window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('scroll', onScrollOptimize);
+  
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  if (mouseRaf) cancelAnimationFrame(mouseRaf);
+});
 </script>
 
 <style scoped>
@@ -930,6 +952,22 @@ onUnmounted(() => {
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
+
+  .floating-particles,
+  .gradient-orbs,
+  .floating-cyber-elements,
+  .spotlight,
+  .interactive-spotlight,
+  .orbital-grid-pattern {
+    display: none !important;
+  }
+
+  .enhanced-video-container,
+  .content-wrapper {
+    transform: none !important;
+    transition: none !important;
+  }
+
   .enhanced-video-container {
     padding: 15px;
   }

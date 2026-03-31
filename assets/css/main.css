@@ -1,4 +1,31 @@
-/* assets/css/main.css */
+/* =========================================
+   PERFORMANCE OPTIMIZATION (60FPS SCROLLING)
+   ========================================= */
+
+/* Meminta browser merender section hanya saat masuk layar (Super ngebut!) */
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+}
+
+/* Memaksa elemen berat menggunakan GPU */
+.particle, 
+.orb, 
+.gradient-orb, 
+.geometric-shapes,
+.cyber-element,
+.spotlight {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  pointer-events: none; 
+}
+
+
+.backdrop-blur-xl, .backdrop-blur-lg, .backdrop-blur-md {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
 
 .animated-gradient-text {
   background: linear-gradient(

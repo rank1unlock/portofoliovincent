@@ -222,6 +222,10 @@ const sloganRef = ref(null);
 const rawProjectCount = ref(0);
 const rawClientCount = ref(0);
 
+let isScrolling = false;
+let scrollTimeout = null;
+let mouseRaf = null;
+
 // Transisi animasi angka
 const animatedProjectCount = useTransition(rawProjectCount, {
   duration: 2500,
@@ -284,16 +288,33 @@ const getParticleStyle = (index) => {
 };
 
 const handleScroll = () => {
+  // Logika asli kamu
   isScrolled.value = window.scrollY > 100;
+
+  // Logika optimasi: Beri tahu sistem bahwa user sedang scroll
+  isScrolling = true;
+  clearTimeout(scrollTimeout);
+  
+  // Jika user berhenti scroll selama 150ms, matikan status isScrolling
+  scrollTimeout = setTimeout(() => {
+    isScrolling = false;
+  }, 150);
 };
 
 const handleMouseMove = (e) => {
+
+  if (isScrolling) return;
+  
+  if (window.innerWidth < 768) return;
+  
   if (!spotlight.value) return;
   
-  const x = (e.clientX / window.innerWidth) * 100;
-  const y = (e.clientY / window.innerHeight) * 100;
-  
-  spotlight.value.style.background = `radial-gradient(circle 600px at ${x}% ${y}%, rgba(59, 130, 246, 0.08), transparent)`;
+  if (mouseRaf) cancelAnimationFrame(mouseRaf);
+  mouseRaf = requestAnimationFrame(() => {
+    const x = (e.clientX / window.innerWidth) * 100;
+    const y = (e.clientY / window.innerHeight) * 100;
+    spotlight.value.style.background = `radial-gradient(circle 600px at ${x}% ${y}%, rgba(59, 130, 246, 0.08), transparent)`;
+  });
 };
 
 const createRipple = (e) => {
@@ -374,21 +395,22 @@ const animateSlogan = () => {
 };
 
 onMounted(() => {
-  // Jalankan fetch data untuk counter saat halaman dimuat
   fetchDynamicCounts();
 
   setTimeout(() => {
     startTypewriter();
     animateSlogan();
   }, 800);
-  
-  window.addEventListener('scroll', handleScroll);
-  window.addEventListener('mousemove', handleMouseMove);
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  window.addEventListener('mousemove', handleMouseMove, { passive: true });
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
   window.removeEventListener('mousemove', handleMouseMove);
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  if (mouseRaf) cancelAnimationFrame(mouseRaf);
 });
 </script>
 
@@ -1273,6 +1295,24 @@ onUnmounted(() => {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+
+  /* Matikan partikel, orb, dan efek 3D di HP (Sangat Menghemat Baterai & Performa) */
+  .floating-particles,
+  .gradient-orbs,
+  .floating-cyber-elements,
+  .spotlight,
+  .interactive-spotlight,
+  .orbital-grid-pattern {
+    display: none !important;
+  }
+
+  /* Matikan efek hover 3D parallax di HP karena tidak ada mouse */
+  .enhanced-video-container,
+  .content-wrapper {
+    transform: none !important;
+    transition: none !important;
+  }
+
   .main-title {
     font-size: 2.5rem;
     line-height: 1.2;
