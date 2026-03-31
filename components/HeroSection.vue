@@ -87,23 +87,27 @@
         <!-- Enhanced CTA buttons with modern design -->
         <div class="buttons-container flex flex-col sm:flex-row justify-center items-center gap-6 mb-12 relative z-50">
           
-          <div class="relative group w-full sm:w-auto">
-            <button class="enhanced-button primary-button w-full sm:w-auto min-w-[240px]">
+          <div class="relative w-full sm:w-auto" @mouseleave="isDropdownOpen = false">
+            
+            <button @click="isDropdownOpen = !isDropdownOpen" class="enhanced-button primary-button w-full sm:w-auto min-w-[240px]">
               <span class="button-bg"></span>
               <span class="button-content justify-between w-full px-2">
                 <span class="flex items-center gap-2">
-                  <Icon name="mdi:download" class="w-5 h-5 transition-transform group-hover:-translate-y-1" />
+                  <Icon name="mdi:download" class="w-5 h-5 transition-transform" :class="{ '-translate-y-1': isDropdownOpen }" />
                   <span class="button-text">{{ T.hero.download_cv?.[lang] || 'Download CV' }}</span>
                 </span>
-                <Icon name="mdi:chevron-down" class="w-5 h-5 transition-transform duration-300 group-hover:rotate-180" />
+                <Icon name="mdi:chevron-down" class="w-5 h-5 transition-transform duration-300" :class="{ 'rotate-180': isDropdownOpen }" />
               </span>
               <span class="button-shine"></span>
             </button>
 
-            <div class="absolute top-full left-0 right-0 mt-3 rounded-xl bg-slate-900/95 border border-blue-500/30 backdrop-blur-xl shadow-[0_15px_40px_rgba(59,130,246,0.2)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top scale-95 group-hover:scale-100 flex flex-col overflow-hidden z-50">
+            <div 
+              class="absolute top-full left-0 right-0 mt-3 rounded-xl bg-slate-900/95 border border-blue-500/30 backdrop-blur-xl shadow-[0_15px_40px_rgba(59,130,246,0.2)] transition-all duration-300 transform origin-top flex flex-col overflow-hidden z-50"
+              :class="isDropdownOpen ? 'opacity-100 visible scale-100' : 'opacity-0 invisible scale-95'"
+            >
               
               <a 
-                href="https://drive.google.com/file/d/1nJtpYD015lBmwEhdElvCFHgvkyKYzMzq/view?usp=drive_link" 
+                href="https://drive.google.com/file/d/LINK_CV_BAHASA_INDONESIA_KAMU/view?usp=sharing" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 class="flex items-center gap-3 px-5 py-4 text-gray-300 hover:text-white hover:bg-blue-600/20 transition-colors border-b border-slate-700/50 group/item"
@@ -118,7 +122,7 @@
               </a>
               
               <a 
-                href="https://drive.google.com/file/d/1YO5UzzQI_IoaxT5nAioEcSBxSAYyqfBq/view?usp=drive_link" 
+                href="https://drive.google.com/file/d/LINK_CV_BAHASA_INGGRIS_KAMU/view?usp=sharing" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 class="flex items-center gap-3 px-5 py-4 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-colors border-b border-slate-700/50 group/item"
@@ -133,7 +137,7 @@
               </a>
               
               <a 
-                href="https://drive.google.com/file/d/1U2AURjqSGRNGtIhb4oLOCULCjT_xTR-w/view?usp=drive_link" 
+                href="https://drive.google.com/file/d/LINK_CV_BAHASA_MANDARIN_KAMU/view?usp=sharing" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 class="flex items-center gap-3 px-5 py-4 text-gray-300 hover:text-white hover:bg-rose-600/20 transition-colors group/item"
@@ -208,6 +212,7 @@ const T = translations;
 const target = ref(null);
 const parallax = useParallax(target);
 const spotlight = ref(null);
+const isDropdownOpen = ref(false);
 
 const isScrolled = ref(false);
 const typewriterRef = ref(null);
