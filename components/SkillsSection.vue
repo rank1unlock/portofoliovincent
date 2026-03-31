@@ -187,7 +187,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 // Impor untuk bahasa
 import { useLang } from '~/composables/useLang';
 import { translations } from '~/data/translations';
@@ -203,6 +203,7 @@ const target = ref(null);
 const targetIsVisible = ref(false);
 const numberSource = ref(0);
 const animatedNumber = useTransition(numberSource, { duration: 1000 });
+
 useIntersectionObserver(target, ([{ isIntersecting }]) => {
     if (isIntersecting) {
       targetIsVisible.value = true;
@@ -211,7 +212,7 @@ useIntersectionObserver(target, ([{ isIntersecting }]) => {
   }, { threshold: 0.1 }
 );
 
-// Data untuk skill teknis (nama skill biasanya tidak perlu diterjemahkan)
+// Data untuk skill teknis
 const skills = ref({
   frameworks: [
     { name: 'Nuxt.js', level: 85, icon: 'logos:nuxt-icon' },
@@ -237,7 +238,33 @@ const skills = ref({
   ],
 });
 
-// New functions for enhanced animations
+// ==========================================
+// 🚀 OPTIMASI PERFORMA TINGGI (ANTI-LAG)
+// ==========================================
+let isScrolling = false;
+let scrollTimeout = null;
+
+const onScrollOptimize = () => {
+  isScrolling = true;
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    isScrolling = false;
+  }, 150);
+};
+
+onMounted(() => {
+  // Mendaftarkan event listener scroll yang ringan
+  window.addEventListener('scroll', onScrollOptimize, { passive: true });
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScrollOptimize);
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+});
+
+// ==========================================
+// ANIMASI PARTIKEL & SPARKLE
+// ==========================================
 const getSkillParticleStyle = (index) => {
   const delay = Math.random() * 8;
   const duration = 12 + Math.random() * 8;
@@ -265,13 +292,18 @@ const getSparkleStyle = (index) => {
 </script>
 
 <style scoped>
-/* Z-INDEX FIX - Ensure section doesn't interfere with navigation */
 section {
   position: relative;
   z-index: 1;
  background: linear-gradient(-45deg, #0a0f1e, #1a1f35, #0f1419, #0f172a, #0a0e1a);
   background-size: 600% 600%;
   animation: skill-gradient-move 30s ease-in-out infinite;
+}
+
+.skill-card, .particle, .sparkle {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @keyframes skill-gradient-move {
@@ -1270,6 +1302,20 @@ section {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+
+  .floating-particles,
+  .particle,
+  .sparkle,
+  .grid-overlay,
+  .skill-glow-effect {
+    display: none !important;
+  }
+  
+  .skill-card {
+    transition: none !important;
+    transform: none !important;
+  }
+
   .skill-float-element,
   .skill-particle,
   .skill-shape {

@@ -154,7 +154,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useLang } from '~/composables/useLang';
 import { translations } from '~/data/translations';
 import { useIntersectionObserver } from '@vueuse/core';
@@ -163,7 +163,6 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { onMounted, onUnmounted } from 'vue';
 
 // Setup untuk bahasa
 const { lang } = useLang();
@@ -172,7 +171,7 @@ const T = translations;
 // Data testimonial
 const { data: testimonials } = await useFetch('/api/testimonials');
 
-// Setup untuk animasi
+// Setup untuk animasi masuk (Intersection Observer)
 const target = ref(null);
 const targetIsVisible = ref(false);
 useIntersectionObserver(
@@ -187,12 +186,32 @@ useIntersectionObserver(
 // Setup untuk Swiper
 const modules = [Navigation, Pagination, Autoplay];
 
-// === ANIMASI INTERAKTIF (MOUSE TRACKING) ===
+// ==========================================
+// 🚀 OPTIMASI PERFORMA TINGGI (ANTI-LAG)
+// ==========================================
 const mouseX = ref(0);
 const mouseY = ref(0);
 let mouseRaf = null;
+let isScrolling = false;
+let scrollTimeout = null;
+
+const onScrollOptimize = () => {
+  isScrolling = true;
+  clearTimeout(scrollTimeout);
+  
+  // Jika user berhenti scroll selama 150ms, aktifkan lagi efek mouse-nya
+  scrollTimeout = setTimeout(() => {
+    isScrolling = false;
+  }, 150);
+};
 
 const handleMouseMove = (e) => {
+  // 1. Matikan kalkulasi mouse saat user sedang menggeser layar (scroll)
+  if (isScrolling) return;
+  
+  // 2. Matikan kalkulasi mouse di layar HP (lebar < 768px) karena tidak ada kursor
+  if (window.innerWidth < 768) return;
+
   if (mouseRaf) cancelAnimationFrame(mouseRaf);
   mouseRaf = requestAnimationFrame(() => {
     mouseX.value = e.clientX;
@@ -201,14 +220,23 @@ const handleMouseMove = (e) => {
 };
 
 onMounted(() => {
-  window.addEventListener('mousemove', handleMouseMove);
+  // 3. Gunakan { passive: true } agar script tidak menghambat laju scroll layar
+  window.addEventListener('mousemove', handleMouseMove, { passive: true });
+  window.addEventListener('scroll', onScrollOptimize, { passive: true });
 });
 
 onUnmounted(() => {
   window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('scroll', onScrollOptimize);
+  
+  // 4. Bersihkan memori saat user pindah halaman agar tidak bocor (Memory Leak)
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  if (mouseRaf) cancelAnimationFrame(mouseRaf);
 });
 
-// Single Particle Generator (Lebih Ringan)
+// ==========================================
+// ANIMASI PARTIKEL & SPARKLE
+// ==========================================
 const getParticleStyle = (index) => {
   const delay = Math.random() * 5;
   const duration = 10 + Math.random() * 20;
@@ -1417,6 +1445,14 @@ const getSparkleStyle = (index) => {
 
 /* Responsive enhancements */
 @media (max-width: 768px) {
+
+  .particles-container,
+  .sparkles-container,
+  .spotlight-effect,
+  .background-decorations {
+    display: none !important;
+  }
+
   .bg-shape-4,
   .bg-shape-5,
   .bg-shape-6 {
