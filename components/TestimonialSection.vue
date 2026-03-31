@@ -1445,73 +1445,101 @@ const getSparkleStyle = (index) => {
 
 /* Responsive enhancements */
 @media (max-width: 768px) {
-
+  /* =========================================================
+     HARDCORE OPTIMIZATION UNTUK MOBILE (MEMBUNUH SEMUA LAG)
+     ========================================================= */
+  
+  /* Sembunyikan SEMUA elemen dekorasi yang memberatkan GPU HP */
   .particles-container,
   .sparkles-container,
   .spotlight-effect,
-  .background-decorations {
+  .background-decorations,
+  .floating-particles,
+  .gradient-orbs,
+  .orbital-grid-pattern,
+  .floating-cyber-elements,
+  .interactive-spotlight,
+  .card-floating-elements,
+  .bg-shape,
+  .flowing-particles,
+  .cosmic-dust,
+  .light-rays,
+  .img-outer-ring,
+  .img-inner-glow,
+  .enhanced-glow-ring,
+  .img-aurora-effect,
+  .img-sparkle-container {
     display: none !important;
   }
 
-  .bg-shape-4,
-  .bg-shape-5,
-  .bg-shape-6 {
-    display: none;
+  /* Kurangi kualitas kaca buram (backdrop-filter memakan RAM sangat besar di HP) */
+  .enhanced-card {
+    backdrop-filter: none !important;
+    background: rgba(20, 20, 20, 0.95) !important; /* Gunakan warna solid sedikit transparan sebagai gantinya */
+    margin-top: 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4) !important;
   }
-  
-  .flowing-particles {
-    opacity: 0.7;
+
+  /* Hilangkan efek animasi saat card di-hover karena HP menggunakan layar sentuh */
+  .enhanced-card:hover {
+    transform: none !important;
+    border-color: rgba(75, 85, 99, 0.3) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4) !important;
   }
-  
-  .light-rays {
-    opacity: 0.5;
+
+  .enhanced-card:hover .enhanced-img {
+    transform: none !important;
+    filter: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.6) !important;
   }
-  
+
+  .enhanced-card:hover .enhanced-quote-icon,
+  .enhanced-card:hover .testimonial-quote-icon-close {
+    transform: none !important;
+  }
+
+  /* Sesuaikan ukuran gambar untuk HP */
   .enhanced-img-wrapper {
-    width: 80px;
-    height: 80px;
-    top: -50px; /* Disesuaikan untuk mobile */
-  }
-  
-  .img-outer-ring {
-    width: 110px; /* Disesuaikan untuk mobile */
-    height: 110px;
-  }
-  
-  .img-inner-glow {
-    width: 100px; /* Disesuaikan untuk mobile */
-    height: 100px;
+    width: 75px !important;
+    height: 75px !important;
+    top: -40px !important;
   }
   
   .enhanced-quote-icon {
-    @apply w-16 h-16;
+    width: 45px !important;
+    height: 45px !important;
+    top: 10px !important;
+    left: 10px !important;
+    animation: none !important; /* Matikan animasi melayang */
   }
   
   .testimonial-quote-icon-close {
-    @apply w-12 h-12;
+    width: 35px !important;
+    height: 35px !important;
+    bottom: 10px !important;
+    right: 10px !important;
+    animation: none !important;
   }
   
   .enhanced-star {
-    width: 16px;
-    height: 16px;
+    width: 14px !important;
+    height: 14px !important;
+    animation: none !important; /* Matikan kerlip bintang di HP */
   }
   
   .social-proof-badge {
-    font-size: 0.7rem;
-    padding: 3px 6px;
+    font-size: 0.65rem !important;
+    padding: 2px 6px !important;
+    animation: none !important;
+    backdrop-filter: none !important;
   }
   
-  /* Mobile spacing adjustment */
   .testimonial-container {
-    margin-top: 60px !important;
+    margin-top: 50px !important;
   }
   
   .slide-with-image-space {
-    padding-top: 50px !important;
-  }
-  
-  .content-area {
-    padding-top: 4rem !important; /* 64px - lebih besar untuk mobile */
+    padding-top: 40px !important;
   }
 }
 
@@ -1644,5 +1672,33 @@ const getSparkleStyle = (index) => {
 
 .testimonial-container:hover .dust-particle {
   animation-duration: 8s;
+}
+
+/* =========================================================
+   HARDWARE ACCELERATION (MENGHINDARI DROP FRAME/LAG)
+   ========================================================= */
+
+/* Paksa browser hanya me-render komponen ini saat sudah masuk ke dalam layar */
+.testimonial-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+
+/* Kunci elemen bergerak ke dalam layer GPU terpisah */
+.enhanced-card,
+.enhanced-img,
+.enhanced-swiper,
+.enhanced-text,
+.quote-highlight {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translate3d(0, 0, 0); /* Khusus Safari/iOS */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Jika ada animasi background, pindahkan ke opacity */
+.card-bg-gradient {
+  will-change: opacity;
 }
 </style>
