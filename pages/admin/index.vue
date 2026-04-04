@@ -60,6 +60,63 @@
       </div>
 
       <div class="mb-20">
+        <h2 class="text-2xl font-bold mb-6 text-yellow-400 border-b border-slate-700 pb-2">
+          Manajemen Tautan Dokumen CV & Resume
+        </h2>
+        <form @submit.prevent="saveDocuments" class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl backdrop-blur-sm space-y-8 max-w-4xl">
+          
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold flex items-center gap-2 text-white border-b border-slate-700/50 pb-2">
+              <Icon name="mdi:text-box-multiple-outline" class="text-blue-400" />
+              Curriculum Vitae (CV Panjang)
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase text-slate-500">Link CV (Indonesia)</label>
+                <input v-model="docForm.cv.id" class="admin-input w-full text-xs" placeholder="Link Google Drive..." />
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase text-slate-500">Link CV (English)</label>
+                <input v-model="docForm.cv.en" class="admin-input w-full text-xs" placeholder="Link Google Drive..." />
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase text-slate-500">Link CV (Mandarin)</label>
+                <input v-model="docForm.cv.zh" class="admin-input w-full text-xs" placeholder="Link Google Drive..." />
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold flex items-center gap-2 text-white border-b border-slate-700/50 pb-2">
+              <Icon name="mdi:text-box-outline" class="text-cyan-400" />
+              Resume (1 Halaman)
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase text-slate-500">Link Resume (Indonesia)</label>
+                <input v-model="docForm.resume.id" class="admin-input w-full text-xs" placeholder="Link Google Drive..." />
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase text-slate-500">Link Resume (English)</label>
+                <input v-model="docForm.resume.en" class="admin-input w-full text-xs" placeholder="Link Google Drive..." />
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase text-slate-500">Link Resume (Mandarin)</label>
+                <input v-model="docForm.resume.zh" class="admin-input w-full text-xs" placeholder="Link Google Drive..." />
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-yellow-900/20">
+              Simpan Semua Tautan
+            </button>
+            <p class="text-xs text-slate-500 text-center mt-3">Kosongkan kotak input jika tombol belum ingin ditampilkan di portofolio.</p>
+          </div>
+        </form>
+      </div>
+
+      <div class="mb-20">
         <h2 class="text-2xl font-bold mb-6 text-blue-400 border-b border-slate-700 pb-2">
           Manajemen Proyek
         </h2>
@@ -1833,6 +1890,30 @@ const deleteEducation = async (id) => {
 const resetEduForm = () => {
   isEditingEdu.value = false;
   eduForm.value = { id: null, degree: { id: '', en: '' }, major: { id: '', en: '' }, institution: '', period: '', gpa: '' };
+};
+
+// ==========================================
+// STATE DOKUMEN (CV & RESUME LINKS)
+// ==========================================
+const { data: documentLinks, refresh: refreshDocs } = await useFetch('/api/documents');
+
+const docForm = ref({
+  cv: { id: '', en: '', zh: '' },
+  resume: { id: '', en: '', zh: '' }
+});
+
+if (documentLinks.value) {
+  docForm.value = JSON.parse(JSON.stringify(documentLinks.value));
+}
+
+const saveDocuments = async () => {
+  try {
+    await $fetch('/api/documents', { method: 'POST', body: docForm.value });
+    alert('Link Dokumen Berhasil Disimpan!');
+    await refreshDocs();
+  } catch (error) {
+    alert('Gagal menyimpan link dokumen!');
+  }
 };
 </script>
 

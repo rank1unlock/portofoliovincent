@@ -1,12 +1,15 @@
 <template>
-  <section id="hero" class="min-h-screen flex items-center justify-center bg-animated-gradient text-white overflow-hidden relative">
+  <section
+    id="hero"
+    class="min-h-screen flex items-center justify-center bg-animated-gradient text-white overflow-hidden relative"
+  >
     <!-- Animated Background Elements -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <!-- Enhanced floating particles with 3D effect -->
       <div class="floating-particles">
         <div class="particle" v-for="i in 60" :key="i" :style="getParticleStyle(i)"></div>
       </div>
-      
+
       <!-- Geometric shapes with better animations -->
       <div class="geometric-shapes">
         <div class="shape shape-triangle"></div>
@@ -18,7 +21,7 @@
 
       <!-- Enhanced grid overlay with perspective -->
       <div class="grid-overlay"></div>
-      
+
       <!-- Spotlight effect following cursor -->
       <div class="spotlight" ref="spotlight"></div>
     </div>
@@ -33,9 +36,11 @@
         <div class="orb orb-4"></div>
       </div>
 
-      <div 
-        class="content-wrapper text-center p-8 pt-32 sm:pt-40 transition-all duration-300 ease-out" 
-        :style="{ transform: `perspective(1000px) rotateX(${parallax.roll * 5}deg) rotateY(${parallax.tilt * 5}deg)` }"
+      <div
+        class="content-wrapper text-center p-8 pt-32 sm:pt-40 transition-all duration-300 ease-out"
+        :style="{
+          transform: `perspective(1000px) rotateX(${parallax.roll * 5}deg) rotateY(${parallax.tilt * 5}deg)`
+        }"
       >
         <!-- Professional badge -->
         <div class="badge-container">
@@ -43,17 +48,19 @@
             <div class="badge-icon">
               <Icon name="mdi:code-tags" class="w-5 h-5" />
             </div>
-            <span class="badge-text">{{ T.hero.badge?.[lang] || "Available for Projects" }}</span>
+            <span class="badge-text">{{ T.hero.badge?.[lang] || 'Available for Projects' }}</span>
             <div class="badge-pulse"></div>
           </div>
         </div>
 
         <!-- Enhanced name with better gradient and animation -->
         <div class="name-container mb-8">
-          <h1 class="main-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight">
+          <h1
+            class="main-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight"
+          >
             Vincent Axel Alexander
           </h1>
-          
+
           <!-- Multiple decorative underlines -->
           <div class="title-decorations">
             <div class="title-underline underline-1"></div>
@@ -78,7 +85,10 @@
 
         <!-- Enhanced slogan with better animation -->
         <div class="slogan-wrapper mb-12">
-          <p class="slogan-text text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4" ref="sloganRef">
+          <p
+            class="slogan-text text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-4"
+            ref="sloganRef"
+          >
             {{ T.hero.slogan[lang] }}
           </p>
           <div class="slogan-decoration"></div>
@@ -87,14 +97,14 @@
         <!-- Enhanced CTA buttons with modern design -->
         <div class="buttons-container flex flex-col sm:flex-row justify-center items-center gap-6 mb-12 relative z-50">
           
-          <div class="relative w-full sm:w-auto" @mouseleave="isDropdownOpen = false">
+          <div ref="dropdownRef" class="relative w-full sm:w-auto">
             
             <button @click="isDropdownOpen = !isDropdownOpen" class="enhanced-button primary-button w-full sm:w-auto min-w-[240px]">
               <span class="button-bg"></span>
               <span class="button-content justify-between w-full px-2">
                 <span class="flex items-center gap-2">
                   <Icon name="mdi:download" class="w-5 h-5 transition-transform" :class="{ '-translate-y-1': isDropdownOpen }" />
-                  <span class="button-text">{{ T.hero.download_cv?.[lang] || 'Download CV' }}</span>
+                  <span class="button-text">Download CV / Resume</span>
                 </span>
                 <Icon name="mdi:chevron-down" class="w-5 h-5 transition-transform duration-300" :class="{ 'rotate-180': isDropdownOpen }" />
               </span>
@@ -102,54 +112,135 @@
             </button>
 
             <div 
-              class="absolute top-full left-0 right-0 mt-3 rounded-xl bg-slate-900/95 border border-blue-500/30 backdrop-blur-xl shadow-[0_15px_40px_rgba(59,130,246,0.2)] transition-all duration-300 transform origin-top flex flex-col overflow-hidden z-50"
+              class="absolute bottom-full left-0 right-0 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-[380px] mb-3 rounded-xl bg-slate-900/95 border border-blue-500/30 backdrop-blur-xl shadow-[0_-15px_40px_rgba(59,130,246,0.2)] transition-all duration-300 transform origin-bottom flex flex-col overflow-hidden z-50"
               :class="isDropdownOpen ? 'opacity-100 visible scale-100' : 'opacity-0 invisible scale-95'"
             >
               
-              <a 
-                href="https://drive.google.com/file/d/LINK_CV_BAHASA_INDONESIA_KAMU/view?usp=sharing" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="flex items-center gap-3 px-5 py-4 text-gray-300 hover:text-white hover:bg-blue-600/20 transition-colors border-b border-slate-700/50 group/item"
-              >
-                <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover/item:bg-blue-500/20 transition-colors">
-                  <Icon name="mdi:file-pdf-box" class="w-5 h-5 text-blue-400" />
+              <div class="flex border-b border-slate-700/50 bg-slate-800/80">
+                <button 
+                  @click.prevent="activeDocCategory = 'cv'" 
+                  class="flex-1 py-3 px-1 flex flex-col items-center justify-center gap-1 transition-all border-b-2"
+                  :class="activeDocCategory === 'cv' ? 'border-blue-400 bg-slate-800' : 'border-transparent opacity-60 hover:opacity-100 hover:bg-slate-800/50'"
+                >
+                  <Icon name="mdi:text-box-multiple-outline" class="w-4 h-4" :class="activeDocCategory === 'cv' ? 'text-blue-400' : 'text-slate-400'" />
+                  <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider" :class="activeDocCategory === 'cv' ? 'text-blue-400' : 'text-slate-400'">Curriculum Vitae</span>
+                </button>
+
+                <button 
+                  @click.prevent="activeDocCategory = 'resume'" 
+                  class="flex-1 py-3 px-1 flex flex-col items-center justify-center gap-1 transition-all border-b-2"
+                  :class="activeDocCategory === 'resume' ? 'border-cyan-400 bg-slate-800' : 'border-transparent opacity-60 hover:opacity-100 hover:bg-slate-800/50'"
+                >
+                  <Icon name="mdi:text-box-outline" class="w-4 h-4" :class="activeDocCategory === 'resume' ? 'text-cyan-400' : 'text-slate-400'" />
+                  <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider" :class="activeDocCategory === 'resume' ? 'text-cyan-400' : 'text-slate-400'">Resume (1-Page)</span>
+                </button>
+              </div>
+
+              <div class="relative max-h-[450px] overflow-y-auto custom-scrollbar pb-2">
+                
+                <div v-show="activeDocCategory === 'cv'" class="flex flex-col animate-tab-fade">
+                  <a 
+                    v-if="documentLinks?.cv?.id"
+                    :href="documentLinks.cv.id" 
+                    target="_blank" rel="noopener noreferrer" 
+                    class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white hover:bg-blue-600/20 transition-colors border-b border-slate-700/50 group/item"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover/item:bg-blue-500/20 transition-colors">
+                      <Icon name="mdi:file-pdf-box" class="w-5 h-5 text-blue-400" />
+                    </div>
+                    <div class="flex flex-col text-left">
+                      <span class="font-bold text-sm">Indonesia</span>
+                      <span class="text-[10px] text-slate-500 uppercase tracking-wider">Versi Bahasa ID</span>
+                    </div>
+                  </a>
+                  
+                  <a 
+                    v-if="documentLinks?.cv?.en"
+                    :href="documentLinks.cv.en" 
+                    target="_blank" rel="noopener noreferrer" 
+                    class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-colors border-b border-slate-700/50 group/item"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover/item:bg-purple-500/20 transition-colors">
+                      <Icon name="mdi:file-pdf-box" class="w-5 h-5 text-purple-400" />
+                    </div>
+                    <div class="flex flex-col text-left">
+                      <span class="font-bold text-sm">English</span>
+                      <span class="text-[10px] text-slate-500 uppercase tracking-wider">International</span>
+                    </div>
+                  </a>
+                  
+                  <a 
+                    v-if="documentLinks?.cv?.zh"
+                    :href="documentLinks.cv.zh" 
+                    target="_blank" rel="noopener noreferrer" 
+                    class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white hover:bg-rose-600/20 transition-colors group/item"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center group-hover/item:bg-rose-500/20 transition-colors">
+                      <Icon name="mdi:file-pdf-box" class="w-5 h-5 text-rose-400" />
+                    </div>
+                    <div class="flex flex-col text-left">
+                      <span class="font-bold text-sm">中文 (Mandarin)</span>
+                      <span class="text-[10px] text-slate-500 uppercase tracking-wider">Chinese Version</span>
+                    </div>
+                  </a>
+
+                  <div v-if="!documentLinks?.cv?.id && !documentLinks?.cv?.en && !documentLinks?.cv?.zh" class="p-6 text-center text-slate-500 text-xs italic">
+                    Belum ada CV yang diunggah.
+                  </div>
                 </div>
-                <div class="flex flex-col text-left">
-                  <span class="font-bold text-sm">Indonesia</span>
-                  <span class="text-[10px] text-slate-500 uppercase tracking-wider">Versi Bahasa ID</span>
+
+                <div v-show="activeDocCategory === 'resume'" class="flex flex-col animate-tab-fade">
+                  <a 
+                    v-if="documentLinks?.resume?.id"
+                    :href="documentLinks.resume.id" 
+                    target="_blank" rel="noopener noreferrer" 
+                    class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white hover:bg-cyan-600/20 transition-colors border-b border-slate-700/50 group/item"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center group-hover/item:bg-cyan-500/20 transition-colors">
+                      <Icon name="mdi:file-document" class="w-5 h-5 text-cyan-400" />
+                    </div>
+                    <div class="flex flex-col text-left">
+                      <span class="font-bold text-sm">Indonesia</span>
+                      <span class="text-[10px] text-slate-500 uppercase tracking-wider">Ringkasan Singkat</span>
+                    </div>
+                  </a>
+
+                  <a 
+                    v-if="documentLinks?.resume?.en"
+                    :href="documentLinks.resume.en" 
+                    target="_blank" rel="noopener noreferrer" 
+                    class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white hover:bg-indigo-600/20 transition-colors border-b border-slate-700/50 group/item"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center group-hover/item:bg-indigo-500/20 transition-colors">
+                      <Icon name="mdi:file-document" class="w-5 h-5 text-indigo-400" />
+                    </div>
+                    <div class="flex flex-col text-left">
+                      <span class="font-bold text-sm">English</span>
+                      <span class="text-[10px] text-slate-500 uppercase tracking-wider">Quick Summary</span>
+                    </div>
+                  </a>
+
+                  <a 
+                    v-if="documentLinks?.resume?.zh"
+                    :href="documentLinks.resume.zh" 
+                    target="_blank" rel="noopener noreferrer" 
+                    class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white hover:bg-orange-600/20 transition-colors group/item"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center group-hover/item:bg-orange-500/20 transition-colors">
+                      <Icon name="mdi:file-document" class="w-5 h-5 text-orange-400" />
+                    </div>
+                    <div class="flex flex-col text-left">
+                      <span class="font-bold text-sm">中文 (Mandarin)</span>
+                      <span class="text-[10px] text-slate-500 uppercase tracking-wider">Chinese Summary</span>
+                    </div>
+                  </a>
+
+                  <div v-if="!documentLinks?.resume?.id && !documentLinks?.resume?.en && !documentLinks?.resume?.zh" class="p-6 text-center text-slate-500 text-xs italic">
+                    Belum ada Resume yang diunggah.
+                  </div>
                 </div>
-              </a>
-              
-              <a 
-                href="https://drive.google.com/file/d/LINK_CV_BAHASA_INGGRIS_KAMU/view?usp=sharing" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="flex items-center gap-3 px-5 py-4 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-colors border-b border-slate-700/50 group/item"
-              >
-                <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover/item:bg-purple-500/20 transition-colors">
-                  <Icon name="mdi:file-pdf-box" class="w-5 h-5 text-purple-400" />
-                </div>
-                <div class="flex flex-col text-left">
-                  <span class="font-bold text-sm">English</span>
-                  <span class="text-[10px] text-slate-500 uppercase tracking-wider">International</span>
-                </div>
-              </a>
-              
-              <a 
-                href="https://drive.google.com/file/d/LINK_CV_BAHASA_MANDARIN_KAMU/view?usp=sharing" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="flex items-center gap-3 px-5 py-4 text-gray-300 hover:text-white hover:bg-rose-600/20 transition-colors group/item"
-              >
-                <div class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center group-hover/item:bg-rose-500/20 transition-colors">
-                  <Icon name="mdi:file-pdf-box" class="w-5 h-5 text-rose-400" />
-                </div>
-                <div class="flex flex-col text-left">
-                  <span class="font-bold text-sm">中文 (Mandarin)</span>
-                  <span class="text-[10px] text-slate-500 uppercase tracking-wider">Chinese Version</span>
-                </div>
-              </a>
+
+              </div>
             </div>
           </div>
           
@@ -173,109 +264,114 @@
         <div class="social-proof">
           <div class="proof-item">
             <div class="proof-number">2+</div>
-            <div class="proof-label">{{ T.hero.years_exp?.[lang] || "Years Experience" }}</div>
+            <div class="proof-label">{{ T.hero.years_exp?.[lang] || 'Years Experience' }}</div>
           </div>
           <div class="proof-divider"></div>
           <div class="proof-item">
             <div class="proof-number">{{ displayProjectCount }}+</div>
-            <div class="proof-label">{{ T.hero.projects?.[lang] || "Projects Completed" }}</div>
+            <div class="proof-label">{{ T.hero.projects?.[lang] || 'Projects Completed' }}</div>
           </div>
           <div class="proof-divider"></div>
           <div class="proof-item">
             <div class="proof-number">{{ displayClientCount }}+</div>
-            <div class="proof-label">{{ T.hero.clients?.[lang] || "Happy Clients" }}</div>
+            <div class="proof-label">{{ T.hero.clients?.[lang] || 'Happy Clients' }}</div>
           </div>
         </div>
       </div>
 
-    <!-- Corner decorations -->
+      <!-- Corner decorations -->
       <div class="corner-decorations">
-          <div class="corner corner-tl"></div>
-          <div class="corner corner-tr"></div>
-          <div class="corner corner-bl"></div>
-          <div class="corner corner-br"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 // Tambahkan useTransition dan TransitionPresets di import ini
-import { useParallax, useTransition, TransitionPresets } from '@vueuse/core';
-import { useLang } from '~/composables/useLang';
-import { translations } from '~/data/translations';
+import { useParallax, useTransition, TransitionPresets } from '@vueuse/core'
+import { useLang } from '~/composables/useLang'
+import { translations } from '~/data/translations'
 
-const { lang } = useLang();
-const T = translations;
+const { lang } = useLang()
+const T = translations
 
-const target = ref(null);
-const parallax = useParallax(target);
-const spotlight = ref(null);
-const isDropdownOpen = ref(false);
+const target = ref(null)
+const parallax = useParallax(target)
+const spotlight = ref(null)
+const isDropdownOpen = ref(false)
+const dropdownRef = ref(null)
+const activeDocCategory = ref('cv');
 
-const isScrolled = ref(false);
-const typewriterRef = ref(null);
-const sloganRef = ref(null);
+const isScrolled = ref(false)
+const typewriterRef = ref(null)
+const sloganRef = ref(null)
+const { data: documentLinks } = await useFetch('/api/documents');
 
 // --- LOGIKA COUNTER ANIMASI (PROJECTS & CLIENTS) ---
-const rawProjectCount = ref(0);
-const rawClientCount = ref(0);
+const rawProjectCount = ref(0)
+const rawClientCount = ref(0)
 
-let isScrolling = false;
-let scrollTimeout = null;
-let mouseRaf = null;
+let isScrolling = false
+let scrollTimeout = null
+let mouseRaf = null
 
 // Transisi animasi angka
 const animatedProjectCount = useTransition(rawProjectCount, {
   duration: 2500,
-  transition: TransitionPresets.easeOutExpo,
-});
+  transition: TransitionPresets.easeOutExpo
+})
 const animatedClientCount = useTransition(rawClientCount, {
   duration: 2500,
-  transition: TransitionPresets.easeOutExpo,
-});
+  transition: TransitionPresets.easeOutExpo
+})
 
 // Pembulatan angka
-const displayProjectCount = computed(() => Math.round(animatedProjectCount.value));
-const displayClientCount = computed(() => Math.round(animatedClientCount.value));
+const displayProjectCount = computed(() => Math.round(animatedProjectCount.value))
+const displayClientCount = computed(() => Math.round(animatedClientCount.value))
 
 // Fungsi Fetch Paralel (Performa Tinggi)
 const fetchDynamicCounts = async () => {
   try {
-    const client = useSupabaseClient();
-    
+    const client = useSupabaseClient()
+
     // Menggunakan Promise.all agar 2 request berjalan bersamaan tanpa saling menunggu
     const [projectsData, clientsData] = await Promise.all([
       client.from('projects').select('*', { count: 'exact', head: true }),
       client.from('testimonials').select('*', { count: 'exact', head: true })
-    ]);
+    ])
 
     // Update state jika data berhasil diambil, jika tidak gunakan angka default (5 dan 6)
-    rawProjectCount.value = (projectsData.count !== null) ? projectsData.count : 5;
-    rawClientCount.value = (clientsData.count !== null) ? clientsData.count : 6;
-    
+    rawProjectCount.value = projectsData.count !== null ? projectsData.count : 5
+    rawClientCount.value = clientsData.count !== null ? clientsData.count : 6
   } catch (err) {
-    console.error("Failed to fetch counts:", err);
-    rawProjectCount.value = 5;
-    rawClientCount.value = 6;
+    console.error('Failed to fetch counts:', err)
+    rawProjectCount.value = 5
+    rawClientCount.value = 6
   }
-};
+}
 // --------------------------------------------------
 
-const roles = computed(() => T.value.hero.roles[lang.value] || [
-  'Full Stack Developer',
-  'Software Engineer', 
-  'Web Developer',
-  'Database Engineer'
-]);
+const roles = computed(
+  () =>
+    T.value.hero.roles[lang.value] || [
+      'Full Stack Developer',
+      'Software Engineer',
+      'Web Developer',
+      'Database Engineer'
+    ]
+)
 
 const getParticleStyle = (index) => {
-  const delay = Math.random() * 8;
-  const duration = 12 + Math.random() * 15;
-  const size = 1 + Math.random() * 3;
-  const hue = Math.random() * 60 + 200;
-  
+  const delay = Math.random() * 8
+  const duration = 12 + Math.random() * 15
+  const size = 1 + Math.random() * 3
+  const hue = Math.random() * 60 + 200
+
   return {
     left: Math.random() * 100 + '%',
     animationDelay: delay + 's',
@@ -284,134 +380,146 @@ const getParticleStyle = (index) => {
     height: size + 'px',
     background: `hsl(${hue}, 70%, 60%)`,
     boxShadow: `0 0 ${size * 2}px hsl(${hue}, 70%, 60%)`
-  };
-};
+  }
+}
 
 const handleScroll = () => {
   // Logika asli kamu
-  isScrolled.value = window.scrollY > 100;
+  isScrolled.value = window.scrollY > 100
 
   // Logika optimasi: Beri tahu sistem bahwa user sedang scroll
-  isScrolling = true;
-  clearTimeout(scrollTimeout);
-  
+  isScrolling = true
+  clearTimeout(scrollTimeout)
+
   // Jika user berhenti scroll selama 150ms, matikan status isScrolling
   scrollTimeout = setTimeout(() => {
-    isScrolling = false;
-  }, 150);
-};
+    isScrolling = false
+  }, 150)
+}
 
 const handleMouseMove = (e) => {
+  if (isScrolling) return
 
-  if (isScrolling) return;
-  
-  if (window.innerWidth < 768) return;
-  
-  if (!spotlight.value) return;
-  
-  if (mouseRaf) cancelAnimationFrame(mouseRaf);
+  if (window.innerWidth < 768) return
+
+  if (!spotlight.value) return
+
+  if (mouseRaf) cancelAnimationFrame(mouseRaf)
   mouseRaf = requestAnimationFrame(() => {
-    const x = (e.clientX / window.innerWidth) * 100;
-    const y = (e.clientY / window.innerHeight) * 100;
-    spotlight.value.style.background = `radial-gradient(circle 600px at ${x}% ${y}%, rgba(59, 130, 246, 0.08), transparent)`;
-  });
-};
+    const x = (e.clientX / window.innerWidth) * 100
+    const y = (e.clientY / window.innerHeight) * 100
+    spotlight.value.style.background = `radial-gradient(circle 600px at ${x}% ${y}%, rgba(59, 130, 246, 0.08), transparent)`
+  })
+}
 
 const createRipple = (e) => {
-  const button = e.currentTarget;
-  const ripple = document.createElement('span');
-  ripple.classList.add('button-ripple-effect');
-  
-  const rect = button.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height);
-  const x = e.clientX - rect.left - size / 2;
-  const y = e.clientY - rect.top - size / 2;
-  
-  ripple.style.width = ripple.style.height = size + 'px';
-  ripple.style.left = x + 'px';
-  ripple.style.top = y + 'px';
-  
-  button.appendChild(ripple);
-  
-  setTimeout(() => ripple.remove(), 600);
-};
+  const button = e.currentTarget
+  const ripple = document.createElement('span')
+  ripple.classList.add('button-ripple-effect')
+
+  const rect = button.getBoundingClientRect()
+  const size = Math.max(rect.width, rect.height)
+  const x = e.clientX - rect.left - size / 2
+  const y = e.clientY - rect.top - size / 2
+
+  ripple.style.width = ripple.style.height = size + 'px'
+  ripple.style.left = x + 'px'
+  ripple.style.top = y + 'px'
+
+  button.appendChild(ripple)
+
+  setTimeout(() => ripple.remove(), 600)
+}
 
 const startTypewriter = () => {
-  if (!typewriterRef.value) return;
-  
-  let roleIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-  
-  const typeSpeed = 80;
-  const deleteSpeed = 40;
-  const pauseTime = 2500;
+  if (!typewriterRef.value) return
+
+  let roleIndex = 0
+  let charIndex = 0
+  let isDeleting = false
+
+  const typeSpeed = 80
+  const deleteSpeed = 40
+  const pauseTime = 2500
 
   const type = () => {
-    const currentRole = roles.value[roleIndex];
-    
-    if (isDeleting) {
-      typewriterRef.value.textContent = currentRole.substring(0, charIndex - 1);
-      charIndex--;
-      
-      if (charIndex === 0) {
-        isDeleting = false;
-        roleIndex = (roleIndex + 1) % roles.value.length;
-        setTimeout(type, 500);
-        return;
-      }
-      
-      setTimeout(type, deleteSpeed);
-    } else {
-      typewriterRef.value.textContent = currentRole.substring(0, charIndex + 1);
-      charIndex++;
-      
-      if (charIndex === currentRole.length) {
-        isDeleting = true;
-        setTimeout(type, pauseTime);
-        return;
-      }
-      
-      setTimeout(type, typeSpeed);
-    }
-  };
+    const currentRole = roles.value[roleIndex]
 
-  type();
-};
+    if (isDeleting) {
+      typewriterRef.value.textContent = currentRole.substring(0, charIndex - 1)
+      charIndex--
+
+      if (charIndex === 0) {
+        isDeleting = false
+        roleIndex = (roleIndex + 1) % roles.value.length
+        setTimeout(type, 500)
+        return
+      }
+
+      setTimeout(type, deleteSpeed)
+    } else {
+      typewriterRef.value.textContent = currentRole.substring(0, charIndex + 1)
+      charIndex++
+
+      if (charIndex === currentRole.length) {
+        isDeleting = true
+        setTimeout(type, pauseTime)
+        return
+      }
+
+      setTimeout(type, typeSpeed)
+    }
+  }
+
+  type()
+}
 
 const animateSlogan = () => {
-  if (!sloganRef.value) return;
-  
-  const text = sloganRef.value.textContent;
-  sloganRef.value.innerHTML = '';
-  
-  [...text].forEach((char, index) => {
-    const span = document.createElement('span');
-    span.textContent = char === ' ' ? '\u00A0' : char;
-    span.className = 'slogan-char';
-    span.style.animationDelay = `${index * 0.03}s`;
-    sloganRef.value.appendChild(span);
-  });
-};
+  if (!sloganRef.value) return
+
+  const text = sloganRef.value.textContent
+  sloganRef.value.innerHTML = ''
+
+  ;[...text].forEach((char, index) => {
+    const span = document.createElement('span')
+    span.textContent = char === ' ' ? '\u00A0' : char
+    span.className = 'slogan-char'
+    span.style.animationDelay = `${index * 0.03}s`
+    sloganRef.value.appendChild(span)
+  })
+}
 
 onMounted(() => {
-  fetchDynamicCounts();
+  fetchDynamicCounts()
 
   setTimeout(() => {
-    startTypewriter();
-    animateSlogan();
-  }, 800);
+    startTypewriter()
+    animateSlogan()
+  }, 800)
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  window.addEventListener('mousemove', handleMouseMove, { passive: true });
-});
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('mousemove', handleMouseMove, { passive: true })
+  document.addEventListener('click', handleClickOutside)
+})
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-  window.removeEventListener('mousemove', handleMouseMove);
-  if (scrollTimeout) clearTimeout(scrollTimeout);
-  if (mouseRaf) cancelAnimationFrame(mouseRaf);
-});
+  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('mousemove', handleMouseMove)
+  document.removeEventListener('click', handleClickOutside)
+
+  if (scrollTimeout) clearTimeout(scrollTimeout)
+  if (mouseRaf) cancelAnimationFrame(mouseRaf)
+})
+
+// ==========================================
+// FUNGSI MENUTUP DROPDOWN SAAT KLIK DI LUAR
+// ==========================================
+const handleClickOutside = (event) => {
+  if (isDropdownOpen.value && dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+    isDropdownOpen.value = false;
+    activeDocCategory.value = 'cv'; 
+  }
+};
 </script>
 
 <style scoped>
@@ -424,10 +532,44 @@ onUnmounted(() => {
 }
 
 @keyframes move-gradient {
-  0%, 100% { background-position: 0% 50%; }
-  25% { background-position: 100% 50%; }
-  50% { background-position: 100% 100%; }
-  75% { background-position: 0% 100%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+/* =========================================
+   CUSTOM SCROLLBAR UNTUK DROPDOWN MENU
+   ========================================= */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.4);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.8);
+}
+
+.buttons-container {
+  z-index: 50 !important;
 }
 
 /* Spotlight effect */
@@ -537,7 +679,8 @@ onUnmounted(() => {
 }
 
 @keyframes float-shape {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg) scale(1);
   }
   25% {
@@ -555,7 +698,7 @@ onUnmounted(() => {
 .grid-overlay {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
   background-size: 60px 60px;
@@ -565,8 +708,12 @@ onUnmounted(() => {
 }
 
 @keyframes grid-move {
-  0% { background-position: 0 0; }
-  100% { background-position: 60px 60px; }
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 60px 60px;
+  }
 }
 
 /* Enhanced floating orbs */
@@ -622,7 +769,8 @@ onUnmounted(() => {
 }
 
 @keyframes float-orb {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -682,8 +830,12 @@ onUnmounted(() => {
 }
 
 @keyframes badge-icon-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .badge-text {
@@ -705,7 +857,8 @@ onUnmounted(() => {
 }
 
 @keyframes badge-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: scale(1);
   }
@@ -746,8 +899,13 @@ onUnmounted(() => {
 }
 
 @keyframes gradient-flow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* Multiple decorative underlines */
@@ -788,7 +946,9 @@ onUnmounted(() => {
 }
 
 @keyframes underline-expand {
-  to { width: min(600px, 90%); }
+  to {
+    width: min(600px, 90%);
+  }
 }
 
 /* Enhanced role/typewriter section */
@@ -862,8 +1022,14 @@ onUnmounted(() => {
 }
 
 @keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .role-glow {
@@ -876,8 +1042,15 @@ onUnmounted(() => {
 }
 
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 
 /* Enhanced slogan */
@@ -940,8 +1113,15 @@ onUnmounted(() => {
 }
 
 @keyframes decoration-pulse {
-  0%, 100% { opacity: 0.3; width: 100px; }
-  50% { opacity: 0.8; width: 150px; }
+  0%,
+  100% {
+    opacity: 0.3;
+    width: 100px;
+  }
+  50% {
+    opacity: 0.8;
+    width: 150px;
+  }
 }
 
 /* Enhanced buttons */
@@ -1199,7 +1379,8 @@ onUnmounted(() => {
 }
 
 @keyframes scroll-wheel {
-  0%, 20% {
+  0%,
+  20% {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
@@ -1227,7 +1408,8 @@ onUnmounted(() => {
 }
 
 @keyframes arrow-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 0.6;
   }
@@ -1289,13 +1471,17 @@ onUnmounted(() => {
 }
 
 @keyframes corner-glow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-
   /* Matikan partikel, orb, dan efek 3D di HP (Sangat Menghemat Baterai & Performa) */
   .floating-particles,
   .gradient-orbs,
@@ -1465,6 +1651,22 @@ onUnmounted(() => {
 .typewriter-content {
   will-change: transform, opacity;
   backface-visibility: hidden;
+}
+
+/* Animasi saat berganti Tab (CV <-> Resume) */
+.animate-tab-fade {
+  animation: tabFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* High contrast mode */
